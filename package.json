@@ -1,0 +1,78 @@
+{
+  "name": "katana.sdk",
+  "version": "0.0.1",
+  "description": "KATANA SDK for Node.js v6",
+  "main": "index.js",
+  "scripts": {
+    "publish": "np",
+    "test": "npm-run-all --serial coverage lint",
+    "test:unit": "mocha sdk/**/*.test.js",
+    "test:dev": "mocha --watch sdk/**/*.test.js",
+    "coverage": "istanbul cover _mocha --report lcovonly -- sdk/**/*.test.js",
+    "coverage-report:coveralls": "cat ./coverage/lcov.info | coveralls",
+    "coverage:check": "istanbul check-coverage",
+    "coverage-clean": "rimraf ./coverage",
+    "lint": "eslint *.js sdk/**/*.js",
+    "predocs": "rimraf docs",
+    "docs": "jsdoc sdk/*.js -d docs"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git@github.com:kusanagi/katana-sdk-node.git"
+  },
+  "keywords": [
+    "katana",
+    "sdk",
+    "node"
+  ],
+  "author": "Orestes Carracedo (orestes.carracedo@kusanagi.io)",
+  "contributors": [
+    {
+      "name": "Denis Ciccale",
+      "url": "https://twitter.com/dciccale"
+    }
+  ],
+  "maintainers": [
+    {
+      "name": "Orestes Carracedo",
+      "email": "orestes.carracedo@kusanagi.io",
+      "url": "https://orestes.io"
+    }
+  ],
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/kusanagi/katana-sdk-node/issues"
+  },
+  "homepage": "http://kusanagi.io/",
+  "private": false,
+  "dependencies": {
+    "immutable": "^3.8.1",
+    "lodash": "^4.16.2",
+    "msgpack": "^1.0.2",
+    "sync-request": "^3.0.1",
+    "yargs": "^6.3.0",
+    "zmq": "^2.15.3"
+  },
+  "devDependencies": {
+    "np": "^2.13.1",
+    "chai": "3.5.0",
+    "commitizen": "^2.9.6",
+    "coveralls": "2.12.0",
+    "cz-conventional-changelog": "^2.0.0",
+    "eslint": "^3.4.0",
+    "husky": "^0.13.2",
+    "istanbul": "^0.4.5",
+    "jsdoc": "^3.4.0",
+    "mocha": "^3.1.2",
+    "mocha-lcov-reporter": "1.3.0",
+    "npm-run-all": "4.0.2",
+    "rimraf": "^2.6.1",
+    "sinon": "1.17.7",
+    "sinon-chai": "2.8.0"
+  },
+  "config": {
+    "commitizen": {
+      "path": "node_modules/cz-conventional-changelog"
+    }
+  }
+}
