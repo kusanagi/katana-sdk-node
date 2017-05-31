@@ -11,7 +11,7 @@ Node.js v6 SDK to interface with the **KATANA**™ framework (https://kusanagi.i
 Requirements
 ------------
 
-* KATANA Framework 1.0+
+* KATANA Framework 1.1
 * [Node.js](https://nodejs.org/en/download/) 6.0+
 * [libzmq](http://zeromq.org/intro:get-the-software) 4.1.5+
 
@@ -247,9 +247,9 @@ service.run();
 Documentation
 -------------
 
-See the [API](https://kusanagi.io/app#katana/docs/sdk) for a technical reference of the SDK, or read the full [specification](https://kusanagi.io/app#katana/docs/sdk/specification).
+See the [API](https://app.kusanagi.io#katana/docs/sdk) for a technical reference of the SDK.
 
-For help using the framework see the [documentation](https://kusanagi.io/app#katana/docs), or join the [community](https://kusanagi.io/app#katana/community).
+For help using the framework see the [documentation](https://app.kusanagi.io#katana/docs), or join the [community](https://app.kusanagi.io#katana/community).
 
 Support
 -------
@@ -261,7 +261,7 @@ Please first read our [contribution guidelines](https://app.kusanagi.io#katana/o
 * [Submitting a patch](https://app.kusanagi.io#katana/open-source/patch)
 * [Security issues](https://app.kusanagi.io#katana/open-source/security)
 
-We use [milestones](https://github.com/kusanagi/katana-sdk-%LANGUAGE%/milestones) to track upcoming releases inline with our [versioning](https://app.kusanagi.io#katana/docs/framework/versions) strategy, and as defined in our [roadmap](https://app.kusanagi.io#katana/docs/framework/roadmap).
+We use [milestones](https://github.com/kusanagi/katana-sdk-node/milestones) to track upcoming releases inline with our [versioning](https://app.kusanagi.io#katana/docs/framework/versions) strategy, and as defined in our [roadmap](https://app.kusanagi.io#katana/docs/framework/roadmap).
 
 For commercial support see the [solutions](https://app.kusanagi.io#solutions) available or [contact us](https://app.kusanagi.io#contact) for more information.
 
@@ -279,4 +279,4 @@ Copyright 2016-2017 KUSANAGI S.L. (https://kusanagi.io). All rights reserved.
 
 KUSANAGI, the sword logo, KATANA and the "K" logo are trademarks and/or registered trademarks of KUSANAGI S.L. All other trademarks are property of their respective owners.
 
-Licensed under the [MIT License](https://kusanagi.io/app#katana/open-source/license). Redistributions of the source code included in this repository must retain the copyright notice found in each file.
+Licensed under the [MIT License](https://app.kusanagi.io#katana/open-source/license). Redistributions of the source code included in this repository must retain the copyright notice found in each file.
