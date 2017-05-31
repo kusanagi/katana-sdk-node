@@ -81,6 +81,7 @@ const Mappings = {
   'required': 'r',
   'response': 'R',
   'result': 'r',
+  'response_result': 'rv',
   'return': 'R',
   'schema': 's',
   'scope': 's',
