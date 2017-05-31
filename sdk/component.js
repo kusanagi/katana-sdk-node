@@ -27,6 +27,8 @@ class Component {
   constructor(processHandle) {
     this.process = processHandle || process;
 
+    this.busy = false;
+
     this.resources       = {};
     this.callbacks       = {};
     this.servicesMapping = [];
@@ -36,8 +38,8 @@ class Component {
     this.logger        = logger;
 
     this.process.on('uncaughtException', this._handleUncaughtException.bind(this));
-    this.process.on('SIGINT', this._cleanExit.bind(this));
-    this.process.on('SIGTERM', this._cleanExit.bind(this));
+    this.process.on('SIGINT', this._softExit.bind(this));
+    this.process.on('SIGTERM', this._hardExit.bind(this));
   }
 
   /**
@@ -56,6 +58,8 @@ class Component {
    * @param {string} status
    */
   _replyWithError(message, code, status) {
+    logger.debug('Replying with error');
+
     const errorPayload = {
       [m.error]: {
         [m.message]: message,
@@ -108,7 +112,18 @@ class Component {
     }
   }
 
-  _cleanExit() {
+  _softExit() {
+    if (this.busy) {
+      logger.warning('Component busy. Waiting before shutdown');
+      return;
+    }
+
+    logger.warning('Soft exit. Component not busy');
+
+    this._hardExit();
+  }
+  _hardExit() {
+    logger.debug('Hard exit. Busy: ' + this.busy);
     this._runShutdown();
     this._closeSocket();
     this.process.exit(0);
@@ -123,10 +138,12 @@ class Component {
   }
 
   _replyWith(metadata, payload) {
+    this.busy = true;
     // To check out the output payload, it's better to use katana service/middleware start --transport
     // You might need to inspect this if the payload is malformed, though
-    // logger.debug('Sending command reply', metadata, JSON.stringify(payload));
+    logger.debug('Sending command reply', metadata, JSON.stringify(payload));
     this.socket.send([metadata, msgpack.pack(payload)]);
+    this.busy = false;
   }
 
   _processMessage(rawActionName, encodedMapping, encodedPayload) {

@@ -33,10 +33,10 @@ class Service extends Component {
       // User
       this._runError(e);
       // Logs
-      logger.error(`Error running callback: ${actionName}. ${e.message}`, e.stack);
+      logger.error(`Service error running callback "${actionName}"`, e.stack);
       // Transport / Command reply
       this._replyWithError(
-        `Middleware error running callback: ${actionName}. ${e.message}`,
+        `Service error running callback "${actionName}": ${e.message}`,
         500,
         'Internal Server Error'
       );
