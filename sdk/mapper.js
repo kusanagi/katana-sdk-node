@@ -44,6 +44,7 @@ class Mapper {
     };
   }
 
+
   /**
    *
    * @param {Response} responseApi
@@ -52,7 +53,7 @@ class Mapper {
   getResponseMessage(responseApi) {
     const httpResponse = responseApi.getHttpResponse();
 
-    return {
+    let payload = {
       [m.command_reply]: {
         [m.name]: responseApi.getName(),
         [m.result]: {
@@ -65,7 +66,12 @@ class Mapper {
         }
       }
     };
+    if (responseApi.hasReturn()) {
+      payload[m.command_reply][m.result][m.response_result] = responseApi.getReturnType();
+    }
+    return payload;
   }
+
 
   /**
    *

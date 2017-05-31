@@ -79,6 +79,29 @@ class Response extends Api {
   getTransport() {
     return this._transport;
   }
+
+  /**
+   * @return {boolean}
+   */
+  hasReturn() {
+    return this
+      .getServiceSchema(this._name, this._version)
+      .getActionSchema(this._actionName)
+      .hasReturn();
+  }
+
+  /**
+   * @return {array|number|boolean|string}
+   */
+  getReturnType() {
+    if (this.return) {
+      return this.return;
+    }
+
+    return this.getServiceSchema(this._name, this._version)
+      .getActionSchema(this._actionName)
+      .getReturnType();
+  }
 }
 
 module.exports = Response;
