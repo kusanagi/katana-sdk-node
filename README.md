@@ -95,7 +95,7 @@ Examples
 
 The following is a simple **Middleware** implementation to handle CORS.
 
-**KATANA** configurations can be defined as *XML*, *YAML* or *JSON*. For this example we're using *YAML*.
+**KATANA** configurations can be defined as *XML*, *YAML* or *JSON*. For this example we're using *JSON*.
 
 First, we'll create a new config file for the **Middleware** as the following:
 
