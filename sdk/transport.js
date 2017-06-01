@@ -9,6 +9,9 @@ const m = require('./mappings');
 const defaultData = {
   [m.meta]: {
     [m.version]: '',
+    [m.duration]: '',
+    [m.start_time]: '',
+    [m.end_time]: '',
     [m.id]: '',
     [m.datetime]: '',
     [m.origin]: [],
@@ -50,6 +53,10 @@ class Transport {
   getOriginService() {
     return this[_data].hasIn([m.meta, m.origin]) ?
       this[_data].getIn([m.meta, m.origin]).toJS() : [];
+  }
+
+  getOriginDuration() {
+    return  this[_data].getIn([m.meta, m.duration]).toJS();
   }
 
   getProperty(name, defaultValue = '') {
@@ -279,11 +286,12 @@ class Transport {
    * @param {string} targetVersion
    * @param {string} targetAction
    * @param {Array} [params=[]] params
+   * @param {Number} duration
    * @param {Number} [timeout=1000]
    */
   addRemoteCall(
     serviceName, serviceVersion, actionName,
-    address, targetService, targetVersion, targetAction, params = [], timeout = 1000
+    address, targetService, targetVersion, targetAction, params = [], duration, timeout = 1000
   ) {
 
     const callData = {
@@ -293,6 +301,7 @@ class Transport {
       [m.action]: targetAction,
       [m.params]: params,
       [m.gateway]: address,
+      [m.duration]: duration,
       [m.timeout]: timeout,
     };
 
@@ -309,11 +318,12 @@ class Transport {
    * @param {string} targetService
    * @param {string} targetVersion
    * @param {string} targetAction
+   * @param {number} duration
    * @param {Array} [params=[]] params
    */
   addDeferredCall(
     serviceName, serviceVersion, actionName,
-    targetService, targetVersion, targetAction, params = []
+    targetService, targetVersion, targetAction, duration, params = []
   ) {
 
     const callData = {
@@ -321,6 +331,7 @@ class Transport {
       [m.version]: targetVersion,
       [m.action]: targetAction,
       [m.action]: targetAction,
+      [m.duration]: duration,
       [m.params]: params,
     };
 
