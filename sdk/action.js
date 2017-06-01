@@ -238,6 +238,8 @@ for action: "${this._actionName}"`
       );
     }
 
+    this._return = value;
+
     return this;
   }
 
