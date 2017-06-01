@@ -220,7 +220,15 @@ class Action extends Api {
    * @see https://github.com/kusanagi/katana-sdk-spec#actionset_returnmixed-value--action
    */
   setReturn(value) {
-    const serviceSchema = this.getServiceSchema(this.name, this.version);
+    let serviceSchema;
+
+    try {
+      serviceSchema = this.getServiceSchema(this.name, this.version);
+    } catch (e) {
+      this._return = value;
+
+      return this;
+    }
     const actionSchema = serviceSchema.getActionSchema(this._actionName);
 
     if (!actionSchema.hasReturn()) {
@@ -247,10 +255,19 @@ for action: "${this._actionName}"`
    * @return {boolean}
    */
   hasReturn() {
-    return this
-      .getServiceSchema(this._name, this._version)
-      .getActionSchema(this._actionName)
-      .hasReturn();
+
+    try {
+      return this
+        .getServiceSchema(this._name, this._version)
+        .getActionSchema(this._actionName)
+        .hasReturn();
+    } catch (e) {
+    }
+
+    // If we don't have a schema, return a sensible default
+    return false;
+  }
+
   /**
    *
    * @return {*}
