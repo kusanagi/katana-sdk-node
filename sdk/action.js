@@ -249,6 +249,14 @@ for action: "${this._actionName}"`
       .getServiceSchema(this._name, this._version)
       .getActionSchema(this._actionName)
       .hasReturn();
+  /**
+   *
+   * @return {*}
+   */
+  getReturn() {
+    if (this._return) {
+      return this._return;
+    }
   }
 
   /**
