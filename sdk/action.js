@@ -501,7 +501,7 @@ for action: "${this._actionName}"`
    * @param {array} params Array of params
    * @return {Action}
    */
-  cpmplete(action, params) {
+  complete(action, params) {
     const [name, version] = [this.getName(), this.getVersion()];
     const transaction = this._buildTransaction(action, params);
     this._transport.registerTransaction('complete', name, version, transaction);
