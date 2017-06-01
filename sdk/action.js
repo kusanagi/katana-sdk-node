@@ -262,10 +262,9 @@ for action: "${this._actionName}"`
         .getActionSchema(this._actionName)
         .hasReturn();
     } catch (e) {
+      // If we don't have a schema, return a sensible default
+      return false;
     }
-
-    // If we don't have a schema, return a sensible default
-    return false;
   }
 
   /**
@@ -501,7 +500,7 @@ for action: "${this._actionName}"`
    * @param {array} params Array of params
    * @return {Action}
    */
-  cpmplete(action, params) {
+  complete(action, params) {
     const [name, version] = [this.getName(), this.getVersion()];
     const transaction = this._buildTransaction(action, params);
     this._transport.registerTransaction('complete', name, version, transaction);
