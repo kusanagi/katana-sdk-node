@@ -67,6 +67,16 @@ Finally, if you'd like to build the technical documentation for the code base, y
 $ npm run docs
 ```
 
+Troubleshooting
+---------------
+
+Make sure these are met before installing the `katana.sdk` npm package. Some of its dependencies need to be compiled through `node-gyp`, and these depend on the `libzmq` headers being present. That means you probably need to install `zqm-devel` or a similar package ([read more](https://github.com/JustinTulloss/zeromq.node#installing-on-unixposix-and-osx)). If the `katana.sdk` npm package was installed before the `libzmq` header files were present, you'll need to nuke your project's `node_modules` folder and reinstall `katana.sdk`.
+
+```sh
+rm -Rf node_modules
+npm install
+```
+
 Getting Started
 ---------------
 
