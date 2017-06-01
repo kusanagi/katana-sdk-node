@@ -18,10 +18,12 @@ Requirements
 Installation
 ------------
 
-Use the following command to install the SDK from the NPM repository:
+Make sure the system dependencies are met.
+
+Use the following command to install the SDK from the NPM repository and add it to your dependencies:
 
 ```sh
-$ npm install katana.sdk
+$ npm install katana.sdk --save
 ```
 
 Alternatively, you might want to install through the [yarn](https://yarnpkg.com) package manager:
