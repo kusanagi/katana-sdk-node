@@ -262,10 +262,9 @@ for action: "${this._actionName}"`
         .getActionSchema(this._actionName)
         .hasReturn();
     } catch (e) {
+      // If we don't have a schema, return a sensible default
+      return false;
     }
-
-    // If we don't have a schema, return a sensible default
-    return false;
   }
 
   /**
