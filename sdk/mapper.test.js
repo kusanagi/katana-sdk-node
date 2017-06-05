@@ -70,7 +70,7 @@ describe('mapper', () => {
       mock.expects('hasReturn').once().returns(true);
       mock.expects('getReturnType').once().returns(null);
       let payload = mapper.getResponseMessage(resp);
-      expect(payload[m.command_reply][m.result][m.response_result]);
+      expect(payload[m.command_reply][m.result][m.response_return]);
     });
   });
 

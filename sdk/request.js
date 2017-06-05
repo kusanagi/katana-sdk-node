@@ -10,6 +10,8 @@ const HttpRequest  = require('./http-request');
 const Param        = require('./param');
 const Transport    = require('./transport');
 
+const m = require('./mappings');
+
 /**
  * Request class
  *
@@ -215,6 +217,54 @@ class Request extends Api {
    */
   getHttpRequest() {
     return this._httpRequest;
+  }
+
+  /**
+   * Determine if a parameter was provided for the action
+   *
+   * @param {string} name Name of the param
+   * @return {boolean}
+   */
+  hasParam(name) {
+    if (_.isNil(name)) {
+      throw new Error('Specify a param `name`');
+    } else if (!_.isString(name)) {
+      throw new TypeError('The param `name` must be a string');
+    }
+
+    return _.has(this._params, [name]);
+  }
+
+  /**
+   * Get a parameter
+   *
+   * @param {string} name Name of the param
+   * @return {Param}
+   */
+  getParam(name) {
+    if (_.isNil(name)) {
+      throw new Error('Specify a param `name`');
+    } else if (!_.isString(name)) {
+      throw new TypeError('The param `name` must be a string');
+    }
+
+    const param = this._params[name];
+    return new Param(name, param[m.value], param[m.type], this.hasParam(name));
+  }
+
+  /**
+   *
+   * @returns {[]}
+   */
+  getParams() {
+    return Object.keys(this._params).map(
+      (name) => new Param(
+        name,
+        this._params[name][m.value],
+        this._params[m.type],
+        this.hasParam(name)
+      )
+    );
   }
 }
 

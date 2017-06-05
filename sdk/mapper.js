@@ -67,7 +67,7 @@ class Mapper {
       }
     };
     if (responseApi.hasReturn()) {
-      payload[m.command_reply][m.result][m.response_result] = responseApi.getReturnType();
+      payload[m.command_reply][m.result][m.response_return] = responseApi.getReturnType();
     }
     return payload;
   }

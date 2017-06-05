@@ -127,9 +127,17 @@ describe('Action', () => {
           [m.type]: 'string'
         }
       };
+      const expectedResult = {
+        name: {
+          ['_value']: 'James',
+          ['_type']: 'string',
+          ['_exists']: true,
+          ['_name']: 'name',
+        }
+      };
       const action = new Action(null, null, 'users', '1.0', null, {}, false, '', mockParams, {});
       // Value comparison
-      expect(action.getParams()).to.eql([mockParams.name]);
+      expect(action.getParams()).to.eql([expectedResult.name]);
     });
   });
 
