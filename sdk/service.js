@@ -25,8 +25,6 @@ class Service extends Component {
    * @private
    */
   _processCommand(actionName, payload) {
-    logger.debug('Incoming command', JSON.stringify(payload));
-
     try {
       this.runAction(this._getAction(actionName, payload));
     } catch (e) {
@@ -47,8 +45,6 @@ class Service extends Component {
    * @param {Action} action The action request
    */
   runAction(action) {
-    logger.debug('Called Service.runAction()');
-
     let responseAction;
     const actionName = action.getActionName();
 

@@ -78,7 +78,7 @@ class Component {
 
   _runStartup() {
     if (!this._startup) {
-      return this.logger.debug('No custom startup callable has been set');
+      return;
     }
 
     try {
@@ -90,7 +90,7 @@ class Component {
 
   _runShutdown() {
     if (!this._shutdown) {
-      return this.logger.debug('No custom shutdown callable has been set');
+      return;
     }
 
     try {
@@ -102,7 +102,7 @@ class Component {
 
   _runError(error) {
     if (!this._error) {
-      return this.logger.debug('No custom error callable has been set');
+      return;
     }
 
     try {
@@ -152,7 +152,6 @@ class Component {
     const newMapping = encodedMapping ? msgpack.unpack(encodedMapping) : null;
 
     if (newMapping) {
-      logger.info('Received new mapping', JSON.stringify(newMapping));
       this._saveNewMapping(newMapping);
     }
 
@@ -231,7 +230,8 @@ class Component {
       this._mapper.getServiceCall(payload[m.command][m.arguments][m.call]),
       payload[m.command][m.arguments][m.meta][m.protocol],
       payload[m.command][m.arguments][m.meta][m.gateway],
-      payload[m.command][m.arguments][m.meta][m.client]
+      payload[m.command][m.arguments][m.meta][m.client],
+      this._getParamsAsMap(payload[m.command][m.action][m.params])
     );
   }
 
@@ -315,27 +315,8 @@ class Component {
 
     this.socket.on('message', this._processMessage.bind(this));
 
-    [
-      'connect',
-      'connect_delay',
-      'connect_retry',
-      'listen',
-      'bind_error',
-      'accept',
-      'accept_error',
-      'close',
-      'close_error',
-      'disconnect',
-      'monitor_error',
-    ].forEach((e) => {
-      this.socket.on(e, (...args) => logger.debug(`ZMQ socket event '${e}'`, [...args]));
-    });
-
     this.socket.bindSync(addr);
-    logger.debug(`Socket bound: ${addr}`);
-
     this.socket.monitor(1000, 0);
-    logger.debug(`Monitoring socket: ${addr}`);
   }
 
   /**

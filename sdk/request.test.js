@@ -2,10 +2,14 @@
 
 const expect = require('chai').expect;
 
+const assert = require('assert');
 const Request = require('./request');
 const Response = require('./response');
 const HttpRequest = require('./http-request');
 const ServiceCall = require('./service-call');
+const Param = require('./param');
+
+const m = require('./mappings');
 
 describe('Request', () => {
   const mockHttpRequest = new HttpRequest({
@@ -123,44 +127,152 @@ describe('Request', () => {
   });
 
 
-  xdescribe('hasParam()', () => {
+  describe('hasParam()', () => {
+    it('should determine if a parameter was provided for the request', () => {
+      const mockParams = {
+        name: {
+          [m.value]: 'James',
+          [m.type]: 'string'
+        }
+      };
+      let call = new ServiceCall(null, null, 'get');
+      const request = new Request(null, null, null, null, {}, false, mockHttpRequest, {}, call,
+        null, null, null, mockParams);
+      expect(request.hasParam('name')).to.equal(true);
+    });
 
-    it('determines if a parameter has been defined', () => {
+    it('should return false if the parameter was not provided', () => {
+      let call = new ServiceCall(null, null, 'get');
+      const request = new Request(null, null, null, null, {}, false, mockHttpRequest, {}, call,
+        null, null, null, {params: {}});
+      expect(request.hasParam('name')).to.equal(false);
+    });
 
+    it('should throw an error if the param `name` is not specified', () => {
+      let call = new ServiceCall(null, null, 'get');
+      const request = new Request(null, null, null, null, {}, false, mockHttpRequest, {}, call,
+        null, null, null, {params: {}});
+      expect(() => request.hasParam(null)).to.throw(/Specify a param `name`/);
+    });
+
+    it('should throw an error if the specified param `name` is not a string', () => {
+      let call = new ServiceCall(null, null, 'get');
+      const request = new Request(null, null, null, null, {}, false, mockHttpRequest, {}, call,
+        null, null, null, {params: {}});
+      expect(() => request.hasParam(true)).to.throw(/The param `name` must be a string/);
+    });
+  });
+
+  describe('getParam()', () => {
+
+    it('should get a parameter with the specified name and be an instance of Param', () => {
+      const mockParams = {
+        name: {
+          [m.value]: 'James',
+          [m.type]: 'string'
+        }
+      };
+      let call = new ServiceCall(null, null, 'get');
+      const request = new Request(null, null, null, null, {}, false, mockHttpRequest, {}, call,
+        null, null, null, mockParams);
+      const param = request.getParam('name');
+      expect(param).to.be.an.instanceOf(Param);
+      expect(param.getValue()).to.equal('James');
+    });
+
+    it('should throw an error if the param `name` is not specified', () => {
+      let call = new ServiceCall(null, null, 'get');
+      const request = new Request(null, null, null, null, {}, false, mockHttpRequest, {}, call,
+        null, null, null, {params: {}});
+      expect(() => request.getParam(null)).to.throw(/Specify a param `name`/);
+    });
+
+    it('should throw an error if the specified param `name` is not a string', () => {
+      let call = new ServiceCall(null, null, 'get');
+      const request = new Request(null, null, null, null, {}, false, mockHttpRequest, {}, call,
+        null, null, null, {params: {}});
+      expect(() => request.getParam(true)).to.throw(/The param `name` must be a string/);
+    });
+  });
+
+  describe('getParams()', () => {
+    it('returns all the parameters as an array of Param objects', () => {
+      const mockParams = {
+        name: {
+          [m.value]: 'James',
+          [m.type]: 'string'
+        }
+      };
+      const expectedResult = {
+        name: {
+          ['_value']: 'James',
+          ['_type']: 'string',
+          ['_exists']: true,
+          ['_name']: 'name',
+        }
+      };
+      let call = new ServiceCall(null, null, 'get');
+      const request = new Request(null, null, null, null, {}, false, mockHttpRequest, {}, call,
+        null, null, null, mockParams);
+      expect(request.getParams()).to.eql([expectedResult.name]);
+    });
+  });
+
+  describe('setParam()', () => {
+    it('should set a new parameter with the specified data to the request', () => {
+      let call = new ServiceCall(null, null, 'get');
+      const request = new Request(null, null, null, null, {}, false, mockHttpRequest, {}, call,
+        null, null, null, {params: {}});
+      const param = request.newParam('name', 'James', 'string');
+      request.setParam(param);
+      const newParam = request.getParam('name');
+      expect(newParam).to.be.an.instanceOf(Param);
+      expect(newParam.getValue()).to.equal('James');
+    });
+
+    it('should throw an error if the param `name` is not specified', () => {
+      let call = new ServiceCall(null, null, 'get');
+      const request = new Request(null, null, null, null, {}, false, mockHttpRequest, {}, call,
+        null, null, null, {params: {}});
+      expect(() => request.setParam(null)).to.throw(/`param` must be an instance of Param/);
     });
 
   });
 
-  xdescribe('getParam()', () => {
-
-    it('returns an instance of Param', () => {
-
+  describe('newParam()', () => {
+    it('should create a new parameter with the specified name', () => {
+      let call = new ServiceCall(null, null, 'get');
+      const request = new Request(null, null, null, null, {}, false, mockHttpRequest, {}, call,
+        null, null, null, {params: {}});
+      const param = request.newParam('name');
+      assert.ok(param instanceof Param);
+      assert.equal(param.getName(), 'name');
     });
 
-  });
-
-  xdescribe('getParams()', () => {
-
-    it('returns an array of Param objects', () => {
-
+    it('should throw an error if the param `name` is not specified', () => {
+      let call = new ServiceCall(null, null, 'get');
+      const request = new Request(null, null, null, null, {}, false, mockHttpRequest, {}, call,
+        null, null, null, {params: {}});
+      expect(() => request.getParam(null)).to.throw(/Specify a param `name`/);
     });
 
-  });
-
-  xdescribe('setParam()', () => {
-
-    it('adds the parameter', () => {
-
+    it('should throw an error if the specified param `name` is not a string', () => {
+      let call = new ServiceCall(null, null, 'get');
+      const request = new Request(null, null, null, null, {}, false, mockHttpRequest, {}, call,
+        null, null, null, {params: {}});
+      expect(() => request.newParam(true)).to.throw(/The param `name` must be a string/);
     });
 
-  });
-
-  xdescribe('newParam()', () => {
-
-    it('returns a new Param instance', () => {
-
+    it('should create a new parameter with the specified name, value and type', () => {
+      let call = new ServiceCall(null, null, 'get');
+      const request = new Request(null, null, null, null, {}, false, mockHttpRequest, {}, call,
+        null, null, null, {params: {}});
+      const param = request.newParam('name', 'James', 'string');
+      expect(param).to.be.an.instanceOf(Param);
+      expect(param.getName()).to.equal('name');
+      expect(param.getValue()).to.equal('James');
+      expect(param.getType()).to.equal('string');
     });
-
   });
 
   describe('newResponse()', () => {
