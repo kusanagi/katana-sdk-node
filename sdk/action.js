@@ -699,6 +699,9 @@ for action: "${this._actionName}"`
     }
 
     const param = this._params[name];
+    if (param instanceof Param) {
+      return param;
+    }
     return new Param(name, param[m.value], param[m.type], this.hasParam(name));
   }
 
@@ -708,7 +711,7 @@ for action: "${this._actionName}"`
    */
   getParams() {
     return Object.keys(this._params).map(
-      (name) => new Param(
+      (name) => this._params[name] instanceof Param ? this._params[name] : new Param(
         name,
         this._params[name][m.value],
         this._params[m.type],

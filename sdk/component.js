@@ -213,7 +213,8 @@ class Component {
       this._mapper.getServiceCall(payload[m.command][m.arguments][m.call]),
       payload[m.command][m.arguments][m.meta][m.protocol],
       payload[m.command][m.arguments][m.meta][m.gateway],
-      payload[m.command][m.arguments][m.meta][m.client]
+      payload[m.command][m.arguments][m.meta][m.client],
+      this._getParamsAsMap(payload[m.command][m.action][m.params])
     );
   }
 

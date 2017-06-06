@@ -32,7 +32,7 @@ module.exports = {
 
     // Best practices
     "block-scoped-var": 0,
-    "complexity": [1, 12],
+    "complexity": [1, 13],
     "consistent-return": 0,
     "curly": [2, "all"],
     "default-case": 2,
@@ -130,7 +130,7 @@ module.exports = {
     // Legacy
     "max-depth": [2, 8],
     "max-len": [1, 100, 2, {"ignoreComments": true, "ignoreUrls": true}],
-    "max-params": [1, 10],
+    "max-params": [1, 13],
 
     // ES2015
     "arrow-body-style": [2, "as-needed"],

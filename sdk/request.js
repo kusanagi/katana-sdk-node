@@ -1,6 +1,6 @@
 'use strict';
 
-/* eslint max-params: ["error", 12] */
+/* eslint max-params: ["error", 13] */
 
 const _            = require('lodash');
 const Api          = require('./api');
@@ -33,11 +33,12 @@ class Request extends Api {
    * @param {string} protocol
    * @param {string} gatewayAddress
    * @param {string} clientAddress
+   * @param {string} params
    */
   constructor(
     component, path, name, version, frameworkVersion, variables, debug,
     httpRequest, serviceCall,
-    protocol, gatewayAddress, clientAddress
+    protocol, gatewayAddress, clientAddress, params
   ) {
     super(component, path, name, version, frameworkVersion, variables, debug);
 
@@ -47,6 +48,7 @@ class Request extends Api {
     this._protocol       = protocol;
     this._gatewayAddress = gatewayAddress;
     this._client         = clientAddress;
+    this._params         = params || {};
   }
 
   /**
@@ -157,20 +159,30 @@ class Request extends Api {
    * @return {Request}
    */
   setParam(param) {
-    this.params[param.getName()] = param;
+    if (!(param instanceof Param)) {
+      throw new Error('`param` must be an instance of Param');
+    }
+    this._params[param.getName()] = param;
 
     return this;
   }
 
   /**
+   * Create a new parameter
    *
-   * @param {string} name
-   * @param {string} value
-   * @param {string} type
+   * @param {string} name Name of the param
+   * @param {string} [value] Value of the param
+   * @param {string} [type] type of the param
    * @return {Param}
    */
   newParam(name, value, type) {
-    return new Param(name, value, type, false);
+    if (_.isNil(name)) {
+      throw new Error('Specify a param `name`');
+    } else if (!_.isString(name)) {
+      throw new TypeError('The param `name` must be a string');
+    }
+
+    return new Param(name, value, type);
   }
 
   /**
@@ -249,6 +261,9 @@ class Request extends Api {
     }
 
     const param = this._params[name];
+    if (param instanceof Param) {
+      return param;
+    }
     return new Param(name, param[m.value], param[m.type], this.hasParam(name));
   }
 
@@ -258,7 +273,7 @@ class Request extends Api {
    */
   getParams() {
     return Object.keys(this._params).map(
-      (name) => new Param(
+      (name) => this._params[name] instanceof Param ? this._params[name] : new Param(
         name,
         this._params[name][m.value],
         this._params[m.type],
