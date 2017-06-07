@@ -25,6 +25,10 @@ class CommandReply {
     } else if (api instanceof Action) {
       return this._getActionMessage(api);
     }
+
+    const className = Object.getPrototypeOf(this).constructor.name;
+
+    throw new Error(`Trying to get reply message for unknown class '${className}'`);
   }
 
   /**

@@ -57,15 +57,11 @@ class Middleware extends Component {
       throw new Error(`Unknown action '${actionName}'`);
     }
 
-    const result = this.callbacks[actionName](request);
+    request._setCallbackExecutionTimeout(actionName);
 
-    if (!result || !(result instanceof Request) && !(result instanceof Response)) {
-      throw new Error('Invalid callback return, must be an instance of Request or Response');
-    }
-
-    const {metadata, 'payload': reply} = this._commandReply.getMessage(result);
-
-    this._replyWith(metadata, reply);
+    this.callbacks[actionName](request);
+    // We don't care about the return.
+    // To finish the request, user code must call .done() on the request object
   }
   /**
    *
@@ -79,15 +75,11 @@ class Middleware extends Component {
       throw new Error(`Unknown action '${actionName}'`);
     }
 
-    const result = this.callbacks[actionName](response);
+    response._setCallbackExecutionTimeout(actionName);
 
-    if (!result || !result instanceof Response) {
-      throw new Error('Invalid callback return, must be an instance of Request');
-    }
-
-    const {metadata, 'payload': reply} = this._commandReply.getMessage(result);
-
-    this._replyWith(metadata, reply);
+    this.callbacks[actionName](response);
+    // We don't care about the return.
+    // To finish the request, user code must call .done() on the response object
   }
 
   /**

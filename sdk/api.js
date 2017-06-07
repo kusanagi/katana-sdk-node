@@ -28,6 +28,49 @@ class Api {
   }
 
   /**
+   *
+   */
+  done() {
+    if (this._callbackTimeout) {
+      clearTimeout(this._callbackTimeout);
+    }
+
+    const {metadata, 'payload': reply} = this._component._commandReply.getMessage(this);
+
+    this._component._replyWith(metadata, reply);
+  }
+
+  /**
+   *
+   * @param {String} action Name of the action callback
+   * @param {Number} timeout Maximum allowed execution time, in milliseconds
+   * @private
+   */
+  _setCallbackExecutionTimeout(action, timeout = 10000) {
+    this.log(`Setting timeout of ${timeout}ms for ${action}`);
+
+    this._callbackTimeout = setTimeout(() => {
+      this._callbackExecutionTimeout(action, timeout);
+    }, timeout);
+  }
+
+  /**
+   *
+   * @param {String} action Name of the action callback
+   * @param {Number} timeout Maximum allowed execution time, in milliseconds
+   * @private
+   */
+  _callbackExecutionTimeout(action, timeout) {
+    this.log(`Callback timeout on ${action}: ${timeout}ms`);
+
+    this._component._replyWithError(
+      `Timeout in execution of ${this._name} (${this._version}) for asynchronous action: ${action}`,
+      500,
+      'Internal Server Error'
+    );
+  }
+
+  /**
    * Returns whether or not the component is currently running in debug mode
    *
    * @return {boolean}

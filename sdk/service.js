@@ -45,26 +45,17 @@ class Service extends Component {
    * @param {Action} action The action request
    */
   runAction(action) {
-    let responseAction;
     const actionName = action.getActionName();
 
     if (typeof this.callbacks[actionName] !== 'function') {
       throw new Error(`Unknown action '${actionName}'`);
     }
 
-    try {
-      responseAction = this.callbacks[actionName](action);
-    } catch (e) {
-      throw new Error(`Userland error. ${e.message}. ${e.stack}`);
-    }
+    action._setCallbackExecutionTimeout(actionName);
 
-    if (!responseAction || !responseAction instanceof Action) {
-      throw new Error('Invalid return response, must be an Action instance');
-    }
-
-    const {metadata, 'payload': reply} = this._commandReply.getMessage(responseAction);
-
-    this._replyWith(metadata, reply);
+    this.callbacks[actionName](action);
+    // We don't care about the return.
+    // To finish the request, user code must call .done() on the request object
   }
 }
 
