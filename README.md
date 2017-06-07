@@ -13,7 +13,8 @@ Requirements
 
 * KATANA Framework 1.1
 * [Node.js](https://nodejs.org/en/download/) 6.0+
-* [libzmq](http://zeromq.org/intro:get-the-software) 4.1.5+
+* python ([a node-gyp requirement](https://github.com/nodejs/node-gyp#installation)) (`v2.7` recommended, `v3.x.x` is not supported) 
+* [libzmq](http://zeromq.org/intro:get-the-software) 4.1.5+ (including headers, you probably need a `libzmq-dev` package)
 
 Installation
 ------------
