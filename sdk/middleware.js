@@ -1,8 +1,6 @@
 'use strict';
 
 const Component = require('./component');
-const Request = require('./request');
-const Response = require('./response');
 const logger = require('./logger');
 
 /**
