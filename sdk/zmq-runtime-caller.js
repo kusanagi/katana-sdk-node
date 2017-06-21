@@ -1,7 +1,7 @@
 'use strict';
 
 const msgpack = require('msgpack');
-const zmq     = require('zmq');
+const zeromq  = require('zeromq');
 const m       = require('./mappings');
 
 class ZMQRuntimeCaller {
@@ -47,7 +47,7 @@ class ZMQRuntimeCaller {
       },
     };
 
-    const socket = zmq.socket('rep');
+    const socket = zeromq.socket('rep');
 
     socket.on('message', this._parseReply.bind(this));
     socket.bindSync(address);

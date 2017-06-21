@@ -1,6 +1,6 @@
 'use strict';
 
-const zmq           = require('zmq');
+const zeromq        = require('zeromq');
 const msgpack       = require('msgpack');
 const Mapper        = require('./mapper');
 const CommandReply  = require('./command-reply');
@@ -309,7 +309,7 @@ class Component {
   }
 
   _initZMQCommunication() {
-    this.socket = zmq.socket('rep');
+    this.socket = zeromq.socket('rep');
 
     let addr = `ipc://${this.cli.socket}`;
 
