@@ -50,7 +50,7 @@ class Service extends Component {
       throw new Error(`Unknown action '${actionName}'`);
     }
 
-    action._setCallbackExecutionTimeout(actionName);
+    action._setCallbackExecutionTimeout(actionName, this.cli.timeout);
 
     this.callbacks[actionName](action);
     // We don't care about the return.

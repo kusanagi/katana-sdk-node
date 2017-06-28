@@ -4,6 +4,8 @@ const path = require('path');
 const logger = require('./logger');
 const yargs = require('yargs');
 
+const TIMEOUT_DEFAULT = 30000; // in ms
+
 exports.parse = () => {
   const argv = yargs(process.argv)
     .strict(true)
@@ -68,6 +70,11 @@ exports.parse = () => {
       describe: 'Optional path to a local file with a payload to be used in a single execution',
       type: 'boolean'
     })
+    .option('timeout', {
+      alias: 'T',
+      describe: 'Maximum execution time in ms',
+      type: 'number'
+    })
     .option('quiet', {
       alias: 'q',
       describe: 'Disable all output, even if in debug mode',
@@ -82,6 +89,10 @@ exports.parse = () => {
     // Generate socket name
     if (!argv.socket) {
       argv.socket = `@katana-${argv.component}-${argv.name}-${argv.version.replace(/\./g, '-')}`;
+    }
+
+    if (!argv.timeout) {
+      argv.timeout = TIMEOUT_DEFAULT;
     }
 
     // Set CWD
