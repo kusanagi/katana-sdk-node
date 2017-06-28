@@ -55,7 +55,7 @@ class Middleware extends Component {
       throw new Error(`Unknown action '${actionName}'`);
     }
 
-    request._setCallbackExecutionTimeout(actionName);
+    request._setCallbackExecutionTimeout(actionName, this.cli.timeout);
 
     this.callbacks[actionName](request);
     // We don't care about the return.
@@ -73,7 +73,7 @@ class Middleware extends Component {
       throw new Error(`Unknown action '${actionName}'`);
     }
 
-    response._setCallbackExecutionTimeout(actionName);
+    response._setCallbackExecutionTimeout(actionName, this.cli.timeout);
 
     this.callbacks[actionName](response);
     // We don't care about the return.

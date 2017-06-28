@@ -44,7 +44,7 @@ class Api {
    *
    * @param {String} action Name of the action callback
    * @param {Number} timeout Maximum allowed execution time, in milliseconds
-   * @private
+   * @protected
    */
   _setCallbackExecutionTimeout(action, timeout = 10000) {
     this.log(`Setting timeout of ${timeout}ms for ${action}`);
@@ -58,7 +58,7 @@ class Api {
    *
    * @param {String} action Name of the action callback
    * @param {Number} timeout Maximum allowed execution time, in milliseconds
-   * @private
+   * @protected
    */
   _callbackExecutionTimeout(action, timeout) {
     this.log(`Callback timeout on ${action}: ${timeout}ms`);
