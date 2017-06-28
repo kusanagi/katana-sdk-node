@@ -51,7 +51,7 @@
     "msgpack": "^1.0.2",
     "sync-request": "^3.0.1",
     "yargs": "^6.3.0",
-    "zmq": "^2.15.3"
+    "zeromq": "^4.3.0"
   },
   "devDependencies": {
     "np": "^2.13.1",
