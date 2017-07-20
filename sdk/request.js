@@ -207,7 +207,7 @@ class Request extends Api {
     const version = this._httpRequest.getProtocolVersion();
     const status  = `${code} ${text}`;
 
-    const response = new Response(
+    return new Response(
       this._component,
       this._path,
       this._name,
@@ -221,8 +221,6 @@ class Request extends Api {
       this._protocol,
       this._gatewayAddress
     );
-    this._component.runResponse(response);
-    return response;
   }
 
   /**
