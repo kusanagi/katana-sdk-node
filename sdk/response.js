@@ -84,7 +84,10 @@ class Response extends Api {
    * @return {boolean}
    */
   hasReturn() {
-    return this.return !== undefined;
+    return this
+      .getServiceSchema(this._name, this._version)
+      .getActionSchema(this._actionName)
+      .hasReturn();
   }
 
   /**
