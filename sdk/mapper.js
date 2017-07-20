@@ -66,8 +66,12 @@ class Mapper {
         }
       }
     };
-    if (responseApi.hasReturn()) {
-      payload[m.command_reply][m.result][m.response_return] = responseApi.getReturnType();
+    try {
+      if (responseApi.hasReturn()) {
+        payload[m.command_reply][m.result][m.response_return] = responseApi.getReturnType();
+      }
+    } catch (e) {
+      return payload;
     }
     return payload;
   }
