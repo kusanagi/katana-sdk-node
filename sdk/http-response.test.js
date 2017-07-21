@@ -171,10 +171,14 @@ describe('HttpResponse', () => {
       assert.equal(httpResponse.getHeader('Content-Type'), 'test');
     });
 
-    it('should return an empty string if specified header does not exist', () => {
+
+    it('should return the default value if specified header does not exist', () => {
       const _mockResponse = Object.assign({headers: {}}, mockResponse);
-      const httpResponse = new HttpResponse(_mockResponse);
-      assert.equal(httpResponse.getHeader('Content-Type'), '');
+      const httpResponse  = new HttpResponse(_mockResponse);
+
+      const defaultValue = 'text/plain';
+
+      assert.equal(httpResponse.getHeader('Content-Type', defaultValue), defaultValue);
     });
 
     it('should throw an error if no header `name` specified', () => {
@@ -194,6 +198,11 @@ describe('HttpResponse', () => {
       const _mockResponse = Object.assign({headers}, mockResponse);
       const httpResponse = new HttpResponse(_mockResponse);
       assert.deepEqual(httpResponse.getHeaders(), headers);
+    });
+
+    it('should return an empty set of headers when none are set', () => {
+      const httpResponse = new HttpResponse(mockResponse);
+      assert.deepEqual(httpResponse.getHeaders(), {});
     });
   });
 

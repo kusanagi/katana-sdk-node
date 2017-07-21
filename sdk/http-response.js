@@ -88,14 +88,14 @@ class HttpResponse {
     return this[_data].hasIn(['headers', name]);
   }
 
-  getHeader(name) {
+  getHeader(name, defaultValue = '') {
     if (_.isNil(name)) {
       throw new Error('Specify a header `name`');
     } else if (!_.isString(name)) {
       throw new TypeError('The header `name` must be a string');
     }
 
-    return this[_data].getIn(['headers', name]) || '';
+    return this[_data].getIn(['headers', name], defaultValue);
   }
 
   getHeaders() {
