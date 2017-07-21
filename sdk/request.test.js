@@ -277,9 +277,11 @@ describe('Request', () => {
 
   describe('newResponse()', () => {
     it('should return a Response instance with specified status code and text', () => {
-      const request = new Request(null, null, null, null, null, {}, false, mockHttpRequest);
-      const [statusCode, statusText] = '200 OK'.split(' ');
-      const response = request.newResponse(parseInt(statusCode, 10), statusText);
+      const request = new Request(null, '', '', '', '', {}, false, mockHttpRequest, null, '', '', '', '');
+      const statusCode = 200;
+      const statusText = 'OK';
+
+      const response = request.newResponse(statusCode, statusText);
 
       expect(response).to.be.an.instanceOf(Response);
       expect(response.getHttpResponse().getStatusCode()).equal(statusCode);

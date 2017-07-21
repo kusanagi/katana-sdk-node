@@ -10,7 +10,10 @@ const _statusText = Symbol('statusText');
 class HttpResponse {
   constructor(data) {
     this[_data] = Immutable.fromJS(data);
-    [this[_statusCode], this[_statusText]] = this[_data].get('status').split(' ');
+    const parts = this[_data].get('status').split(' ');
+
+    this[_statusCode] = parseInt(parts[0], 10);
+    this[_statusText] = parts.slice(1).join(' ');
   }
 
   isProtocolVersion(version) {
