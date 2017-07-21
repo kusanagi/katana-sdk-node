@@ -18,7 +18,9 @@ describe('Response', () => {
   describe('getTransport()', () => {
     it('should return an instance of the transport', () => {
       const transport = new Transport();
-      const response = new Response(null, null, null, null, null, {}, false, null, null, transport);
+      const response = new Response(
+        null, '', '', '', '', {}, false, null, null, transport, '', '', null
+      );
       expect(response.getTransport()).to.be.an.instanceOf(Transport);
     });
   });

@@ -219,7 +219,8 @@ class Request extends Api {
       new HttpResponse({version, status}),
       new Transport(),
       this._protocol,
-      this._gatewayAddress
+      this._gatewayAddress,
+      null
     );
   }
 
