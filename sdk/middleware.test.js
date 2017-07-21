@@ -105,46 +105,63 @@ describe('Middleware', () => {
       });
 
       const response = {
-        'm': {
-          'v': '1.0.0',
-          'i': 'f1b27da9-240b-40e3-99dd-a567e4498ed7',
-          'd': '2016-04-12T02:49:05.761',
-          't': 2,
-          'p': 'http',
-          'g': ['12.34.56.78:1234', 'http://127.0.0.1:80']
-        },
-        'r': {
-          'v': '1.1',
-          'm': 'POST',
-          'u': 'http://example.com/v1.0.0/users',
-          'q': {
-            'name': ['James'],/**/
-            'age': ['32']
-          },
-          'h': {
-            'Accept': 'application/json'
-          },
-          'b': ''
-        },
-        'R': {
-          'v': '1.1',
-          's': '200 OK',
-          'h': {
-            'Content-Type': 'application/json'
-          },
-          'b': '{"result":"OK","message":"Created new user"}'
-        },
-        'T': {
-          'm': {
-            'v': '1.0.0',
-            'i': 'f1b27da9-240b-40e3-99dd-a567e4498ed7',
-            'd': '2016-04-12T02:49:05.761',
-            'g': ['12.34.56.78:1234', 'http://127.0.0.1:80'],
-            'o': ['users', '1.0.0', 'list'],
-            'l': 1,
-            'f': [['users', '1.0.0', ['create', 'update']]],
-            'p': {
-              'foo': 'bar'
+        'm': {'s': 'gateway'},
+        'c': {
+          'n': 'rest',
+          'a': {
+            'm': {
+              'v': '1.1.8',
+              'i': 'f678ed17-896f-4431-8e60-d25c61d195ea',
+              'd': '2017-07-21T10:50:17.710670+00:00',
+              't': 2,
+              'p': 'urn:katana:protocol:http',
+              'g': ['127.0.0.1:4444', 'http://10.0.2.15:9999'],
+              'c': '10.0.2.2:64708'
+            },
+            'R': {
+              'b': '{"errors":[{"detail":"User not found","code":"1","status":"404 Not Found"}]}',
+              'v': '1.1',
+              's': '404 Not Found',
+              'h': {
+                'Access-Control-Allow-Origin': '*',
+                'Content-Type': 'application/vnd.api+json'
+              }
+            },
+            'r': {
+              'b': '',
+              'm': 'GET',
+              'v': '1.1',
+              'h': {
+                'HOST': ['localhost:9999'],
+                'ACCEPT': ['*/*'],
+                'USER-AGENT': ['curl/7.51.0']
+              },
+              'u': 'http://localhost:9999/1.0/users/5'
+            },
+            'T': {
+              'e': {
+                'http://10.0.2.15:9999': {
+                  'users': {
+                    '1.0': [{
+                      's': '404 Not Found',
+                      'm': 'User not found',
+                      'c': 404
+                    }]
+                  }
+                }
+              },
+              't': {},
+              'm': {
+                'e': '2017-07-21T10:50:17.762899+00:00',
+                's': '2017-07-21T10:50:17.748366+00:00',
+                'd': '2017-07-21T10:50:17.709640+00:00',
+                'g': ['127.0.0.1:4444', 'http://10.0.2.15:9999'],
+                'v': '1.1.8',
+                'i': 'f678ed17-896f-4431-8e60-d25c61d195ea',
+                'D': 15,
+                'o': ['users', '1.0', 'read'],
+                'l': 1
+              }
             }
           }
         }
