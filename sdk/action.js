@@ -252,32 +252,6 @@ for action: "${this._actionName}"`
   }
 
   /**
-   * @return {boolean}
-   */
-  hasReturn() {
-
-    try {
-      return this
-        .getServiceSchema(this._name, this._version)
-        .getActionSchema(this._actionName)
-        .hasReturn();
-    } catch (e) {
-      // If we don't have a schema, return a sensible default
-      return false;
-    }
-  }
-
-  /**
-   *
-   * @return {*}
-   */
-  getReturn() {
-    if (this._return) {
-      return this._return;
-    }
-  }
-
-  /**
    * @return {array|number|boolean|string}
    */
   getReturnType() {
