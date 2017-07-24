@@ -164,7 +164,6 @@ class Api {
       &&
       semver.satisfies(definition.schema.getVersion(), version)
     );
-    console.log(service);
 
     if (service) {
       return service.schema;
