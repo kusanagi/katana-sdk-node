@@ -1,4 +1,5 @@
 'use strict';
+const semver = require('semver');
 
 /**
  * Base Api class
@@ -159,7 +160,9 @@ class Api {
     }
 
     const service = this._component.servicesMapping.find((definition) =>
-      name === definition.schema.getName() && version === definition.schema.getVersion()
+      name === definition.schema.getName()
+      &&
+      semver.satisfies(definition.schema.getVersion(), version)
     );
 
     if (service) {

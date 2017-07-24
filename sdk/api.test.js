@@ -231,7 +231,7 @@ describe('Api', () => {
 
     const mockMapping = {
       'users': {
-        '1.0': {
+        '1.0.0': {
           'ac': {
             'list': {
               'D': false,
@@ -289,7 +289,7 @@ describe('Api', () => {
       const api = new Api(component);
 
       component._saveNewMapping(mockMapping);
-      expect(api.getServiceSchema('users', '1.0')).to.be.an.instanceOf(ServiceSchema);
+      expect(api.getServiceSchema('users', '1.0.*')).to.be.an.instanceOf(ServiceSchema);
     });
 
     it('returns an instance of ServiceSchema', () => {
@@ -297,8 +297,8 @@ describe('Api', () => {
       const api = new Api(component);
 
       component._saveNewMapping(mockMapping);
-      expect(api.getServiceSchema('users', '1.0').getName()).to.equal('users');
-      expect(api.getServiceSchema('users', '1.0').getVersion()).to.equal('1.0');
+      expect(api.getServiceSchema('users', '1.0.*').getName()).to.equal('users');
+      expect(api.getServiceSchema('users', '1.0.*').getVersion()).to.equal('1.0.0');
     });
 
   });
