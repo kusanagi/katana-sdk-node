@@ -277,7 +277,8 @@ describe('Request', () => {
 
   describe('newResponse()', () => {
     it('should return a Response instance with specified status code and text', () => {
-      const request = new Request(null, '', '', '', '', {}, false, mockHttpRequest, null, '', '', '', '');
+      const request = new Request(null, '', '', '', '', {}, false, mockHttpRequest, null,
+        '', '', '', '');
       const statusCode = 200;
       const statusText = 'OK';
 
