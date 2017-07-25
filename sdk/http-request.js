@@ -192,7 +192,10 @@ class HttpRequest {
       throw new TypeError('The header `name` must be a string');
     }
 
-    return this[_data].getIn(['headers', name], defaultValue);
+    return Immutable.List.isList(this[_data].getIn(['headers', name], defaultValue)) ?
+      this[_data].getIn(['headers', name], defaultValue).get(0)
+      :
+      this[_data].getIn(['headers', name], defaultValue);
   }
 
   getHeaders() {
