@@ -38,6 +38,13 @@ class Mapper {
             [m.service]: requestApi.getServiceName(),
             [m.version]: requestApi.getServiceVersion(),
             [m.action]: requestApi.getActionName(),
+            [m.params]: requestApi.getParams().map((p) => {
+              return {
+                [m.type]: p.getType(),
+                [m.value]: p.getValue(),
+                [m.name]: p.getName(),
+              }
+            }),
           }
         }
       }
