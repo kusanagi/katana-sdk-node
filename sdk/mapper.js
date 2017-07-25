@@ -86,7 +86,7 @@ class Mapper {
    * @returns {Object}
    */
   getActionMessage(actionApi) {
-    const payload = {
+    return {
       [m.command_reply]: {
         [m.name]: actionApi.getName(),
         [m.result]: {
@@ -94,12 +94,6 @@ class Mapper {
         }
       }
     };
-
-    if (actionApi.hasReturn()) {
-      payload[m.command_reply][m.result][m.return] = actionApi.getReturnType();
-    }
-
-    return payload;
   }
 
   /**
