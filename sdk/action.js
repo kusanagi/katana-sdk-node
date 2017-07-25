@@ -716,7 +716,7 @@ for action: "${this._actionName}"`
       (name) => this._params[name] instanceof Param ? this._params[name] : new Param(
         name,
         this._params[name][m.value],
-        this._params[m.type],
+        this._params[name][m.type],
         this.hasParam(name)
       )
     );
