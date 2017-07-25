@@ -252,32 +252,6 @@ for action: "${this._actionName}"`
   }
 
   /**
-   * @return {boolean}
-   */
-  hasReturn() {
-
-    try {
-      return this
-        .getServiceSchema(this._name, this._version)
-        .getActionSchema(this._actionName)
-        .hasReturn();
-    } catch (e) {
-      // If we don't have a schema, return a sensible default
-      return false;
-    }
-  }
-
-  /**
-   *
-   * @return {*}
-   */
-  getReturn() {
-    if (this._return) {
-      return this._return;
-    }
-  }
-
-  /**
    * @return {array|number|boolean|string}
    */
   getReturnType() {
@@ -742,7 +716,7 @@ for action: "${this._actionName}"`
       (name) => this._params[name] instanceof Param ? this._params[name] : new Param(
         name,
         this._params[name][m.value],
-        this._params[m.type],
+        this._params[name][m.type],
         this.hasParam(name)
       )
     );

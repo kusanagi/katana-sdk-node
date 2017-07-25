@@ -10,7 +10,10 @@ const _statusText = Symbol('statusText');
 class HttpResponse {
   constructor(data) {
     this[_data] = Immutable.fromJS(data);
-    [this[_statusCode], this[_statusText]] = this[_data].get('status').split(' ');
+    const parts = this[_data].get('status').split(' ');
+
+    this[_statusCode] = parseInt(parts[0], 10);
+    this[_statusText] = parts.slice(1).join(' ');
   }
 
   isProtocolVersion(version) {
@@ -85,14 +88,17 @@ class HttpResponse {
     return this[_data].hasIn(['headers', name]);
   }
 
-  getHeader(name) {
+  getHeader(name, defaultValue = '') {
     if (_.isNil(name)) {
       throw new Error('Specify a header `name`');
     } else if (!_.isString(name)) {
       throw new TypeError('The header `name` must be a string');
     }
 
-    return this[_data].getIn(['headers', name]) || '';
+    return Immutable.List.isList(this[_data].getIn(['headers', name], defaultValue)) ?
+      this[_data].getIn(['headers', name], defaultValue).get(0)
+      :
+      this[_data].getIn(['headers', name], defaultValue);
   }
 
   getHeaders() {

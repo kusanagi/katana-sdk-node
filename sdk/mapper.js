@@ -140,7 +140,10 @@ class Mapper {
   }
 
   getHttpResponse(data) {
-    // const responseData = data[m.command][m.arguments][m.response];
+
+    if (!data) {
+      throw new Error('Cannot get HTTP response without data');
+    }
 
     const httpResponseData = {
       version: data[m.version],

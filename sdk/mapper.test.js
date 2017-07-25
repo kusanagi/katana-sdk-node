@@ -65,7 +65,9 @@ describe('mapper', () => {
       const mapper = new Mapper();
       const transport = mapper.getTransport(mockRequestTransport[m.command][m.arguments]);
       const httpResponse = new HttpResponse(mockResponse);
-      const resp = new Response(null, '', '', '', null, {}, false, null, httpResponse, transport);
+      const resp = new Response(
+        null, '', '', '', '', {}, false, null, httpResponse, transport, '', '', null
+      );
       const mock = sinon.mock(resp);
       mock.expects('hasReturn').once().returns(true);
       mock.expects('getReturnType').once().returns(null);

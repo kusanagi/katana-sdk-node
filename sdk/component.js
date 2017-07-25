@@ -248,11 +248,12 @@ class Component {
       this.cli.frameworkVersion,
       this.cli.variables,
       this.cli.debug,
-      this._mapper.getHttpRequest(payload[m.response]),
-      this._mapper.getHttpResponse(payload[m.response]),
-      this._mapper.getTransport(payload[m.transport]),
+      this._mapper.getHttpRequest(payload[m.command][m.arguments][m.request]),
+      this._mapper.getHttpResponse(payload[m.command][m.arguments][m.response]),
+      this._mapper.getTransport(payload[m.command][m.arguments][m.transport]),
       payload[m.meta][m.protocol],
-      payload[m.meta][m.gateway]
+      payload[m.meta][m.gateway],
+      payload[m.command][m.arguments][m.return_value]
     );
   }
 
