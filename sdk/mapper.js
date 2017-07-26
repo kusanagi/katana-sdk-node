@@ -38,6 +38,12 @@ class Mapper {
             [m.service]: requestApi.getServiceName(),
             [m.version]: requestApi.getServiceVersion(),
             [m.action]: requestApi.getActionName(),
+            [m.params]: requestApi.getParams().map((p) => ({
+                [m.type]: p.getType(),
+                [m.value]: p.getValue(),
+                [m.name]: p.getName(),
+              }
+            )),
           }
         }
       }
@@ -79,7 +85,7 @@ class Mapper {
    * @returns {Object}
    */
   getActionMessage(actionApi) {
-    const payload = {
+    return {
       [m.command_reply]: {
         [m.name]: actionApi.getName(),
         [m.result]: {
@@ -87,12 +93,6 @@ class Mapper {
         }
       }
     };
-
-    if (actionApi.hasReturn()) {
-      payload[m.command_reply][m.result][m.return] = actionApi.getReturnType();
-    }
-
-    return payload;
   }
 
   /**

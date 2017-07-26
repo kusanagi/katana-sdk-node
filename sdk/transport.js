@@ -218,7 +218,7 @@ class Transport {
     const gatewayPublicAddress = this._getGatewayPublicAddress();
     const path = [m.data, gatewayPublicAddress, service, version, action];
 
-    this[_data] = this[_data].setIn(path, Immutable.fromJS([source]));
+    this[_data] = this[_data].setIn(path, Immutable.fromJS(source));
   }
 
   _getGatewayPublicAddress() {
