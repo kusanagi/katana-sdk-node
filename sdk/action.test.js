@@ -351,16 +351,16 @@ describe('Action', () => {
 
   describe('setEntity()', () => {
     it('should register an entity object in the transport', () => {
-      const transport = new Transport();
-      const action = new Action(null, null, null, null, null, {}, false, '', {}, transport);
-      const entity = {
-        users: {
-          '1.0.0': {
-            'list_users': []
-          }
-        }
-      };
+      const mockTransport = {[m.meta]: {[m.origin]: ['users', '1.0'], [m.gateway]: ['', '']}};
+      const transport = new Transport(mockTransport);
+      const action = new Action(null, null, 'dev', '1.0', null, {}, false, 'read', {}, transport);
+      const entity =
+        {
+          'user': 'James',
+          'id': 1
+        };
       assert.ok(action.setEntity(entity));
+      assert.deepEqual(transport.getData('dev', '1.0', 'read'), entity);
     });
 
     it('should throw an error if the `entity` is not specified', () => {
@@ -386,7 +386,7 @@ describe('Action', () => {
         }
       ];
       assert.ok(action.setCollection(collection));
-      assert.deepEqual(transport.getData('dev', '1.0', 'list')[0][0], collection[0]);
+      assert.deepEqual(transport.getData('dev', '1.0', 'list'), collection);
     });
 
     it('should throw an error if the `collection` is not specified', () => {
