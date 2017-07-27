@@ -22,9 +22,19 @@ describe('Param', () => {
       expect(param.getValue()).to.equal('val');
     });
 
-    it('should return the casted value of the parameter', () => {
+    it('should return the casted boolean value of the parameter', () => {
       const param = new Param('test', 'true', Param.types.BOOLEAN);
       expect(param.getValue()).to.equal(true);
+    });
+
+    it('should return the casted integer value of the parameter', () => {
+      const param = new Param('test', 10, Param.types.INTEGER);
+      expect(param.getValue()).to.equal(10);
+    });
+
+    it('should return the casted float value of the parameter', () => {
+      const param = new Param('test', 10.0, Param.types.FLOAT);
+      expect(param.getValue()).to.equal(10.0);
     });
   });
 

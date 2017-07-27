@@ -29,7 +29,7 @@ class Param {
    * Create a File instance
    *
    * @param {string} name The name of the parameter
-   * @param {string} [value=''] Value of the parameter
+   * @param {string|integer|float|boolean|object} [value=''] Value of the parameter
    * @param {string} [type=string] The data type of the parameter
    * @param {boolean} [exists=false] Determines if the parameter exists
    */
