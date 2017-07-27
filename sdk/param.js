@@ -61,6 +61,10 @@ class Param {
   getValue() {
     if (this._type === STRING) {
       return String(this._value);
+    } else if (this._type === INTEGER) {
+      return Number.parseInt(this._value, 10);
+    } else if (this._type === FLOAT) {
+      return Number.parseFloat(this._value);
     } else {
       try {
         return JSON.parse(this._value);
