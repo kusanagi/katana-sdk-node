@@ -29,7 +29,7 @@ class Param {
    * Create a File instance
    *
    * @param {string} name The name of the parameter
-   * @param {string} [value=''] Value of the parameter
+   * @param {string|integer|float|boolean|object} [value=''] Value of the parameter
    * @param {string} [type=string] The data type of the parameter
    * @param {boolean} [exists=false] Determines if the parameter exists
    */
@@ -61,6 +61,10 @@ class Param {
   getValue() {
     if (this._type === STRING) {
       return String(this._value);
+    } else if (this._type === INTEGER) {
+      return Number.parseInt(this._value, 10);
+    } else if (this._type === FLOAT) {
+      return Number.parseFloat(this._value);
     } else {
       try {
         return JSON.parse(this._value);
