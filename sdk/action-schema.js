@@ -86,14 +86,14 @@ class ActionSchema extends Schema {
     const paramsObject = this.readProperty(mapping, m.params, {});
     // TODO: Params are supposed to have an OPTIONAL name property in their mapping. Which one wins?
     // In the mapping example the name is omitted in the param mapping, so we're going with the key
-    const paramsArray = Object.keys(paramsObject).map((paramName) => {
-      ParamSchema.fromMapping(paramName, paramsObject[paramName]);
-    });
+    const paramsArray = Object.keys(paramsObject).map((paramName) =>
+      ParamSchema.fromMapping(paramName, paramsObject[paramName])
+    );
 
     const filesObject = this.readProperty(mapping, m.files, {});
-    const filesArray  = Object.keys(filesObject).map((fileName) => {
-      FileSchema.fromMapping(fileName, filesObject[fileName]);
-    });
+    const filesArray  = Object.keys(filesObject).map((fileName) =>
+      FileSchema.fromMapping(fileName, filesObject[fileName])
+    );
 
     return new ActionSchema(
       name,
@@ -369,7 +369,9 @@ class ActionSchema extends Schema {
    * @returns {Object}
    */
   getParams() {
-    return this._params;
+    return this._params.map((param) =>
+      param._name
+    );
   }
 
   /**
@@ -378,7 +380,7 @@ class ActionSchema extends Schema {
    * @returns {boolean}
    */
   hasParam(name) {
-    return typeof this._params[name] !== typeof undefined;
+    return this.getParams().includes(name);
   }
 
   /**
@@ -391,7 +393,13 @@ class ActionSchema extends Schema {
       throw new Error(`Cannot resolve schema for parameter: ${name}`);
     }
 
-    return this._params[name];
+    let schema = null;
+    this._params.forEach((param) => {
+      if (param._name === name) {
+        schema = param;
+      }
+    });
+    return schema;
   }
 
   /**
