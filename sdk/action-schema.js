@@ -392,14 +392,12 @@ class ActionSchema extends Schema {
     if (!this.hasParam(name)) {
       throw new Error(`Cannot resolve schema for parameter: ${name}`);
     }
-
-    let schema = null;
     this._params.forEach((param) => {
       if (param._name === name) {
-        schema = param;
+        return param;
       }
     });
-    return schema;
+    return null;
   }
 
   /**
