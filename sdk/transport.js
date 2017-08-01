@@ -184,7 +184,7 @@ class Transport {
     return errors.toJS();
   }
 
-  setProperty(name, value) {
+  _setProperty(name, value) {
     this[_data] = this[_data].setIn(['meta', 'properties', name], value);
   }
 
@@ -209,11 +209,11 @@ class Transport {
     return this[_data].get(m.body);
   }
 
-  setBody(file) {
+  _setBody(file) {
     this[_data] = this[_data].setIn([m.body], file);
   }
 
-  setData(service, version, action, source) {
+  _setData(service, version, action, source) {
 
     const gatewayPublicAddress = this._getGatewayPublicAddress();
     const path = [m.data, gatewayPublicAddress, service, version, action];
@@ -254,7 +254,7 @@ class Transport {
     );
   }
 
-  setLink(name, link, uri) {
+  _setLink(name, link, uri) {
     this[_data] = this[_data].setIn(['links', name, link], uri);
   }
 

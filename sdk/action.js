@@ -92,7 +92,7 @@ class Action extends Api {
       throw new TypeError('The property `value` must be a string');
     }
 
-    this._transport.setProperty(name, value);
+    this._transport._setProperty(name, value);
 
     return this;
   }
@@ -209,7 +209,7 @@ class Action extends Api {
    * @return {Action}
    */
   setDownload(file) {
-    this._transport.setBody(file);
+    this._transport._setBody(file);
 
     return this;
   }
@@ -278,7 +278,7 @@ for action: "${this._actionName}"`
     }
 
     const [service, version, action] = [this.getName(), this.getVersion(), this.getActionName()];
-    this._transport.setData(service, version, action, entity);
+    this._transport._setData(service, version, action, entity);
 
     return this;
   }
@@ -297,7 +297,7 @@ for action: "${this._actionName}"`
     }
 
     const [service, version, action] = [this.getName(), this.getVersion(), this.getActionName()];
-    this._transport.setData(service, version, action, collection);
+    this._transport._setData(service, version, action, collection);
 
     return this;
   }
@@ -414,7 +414,7 @@ for action: "${this._actionName}"`
       throw new TypeError('The `uri` must be a string');
     }
 
-    this._transport.setLink(this.getName(), link, uri);
+    this._transport._setLink(this.getName(), link, uri);
     return this;
   }
 
