@@ -36,10 +36,14 @@ class Api {
       clearTimeout(this._callbackTimeout);
     }
 
+    if (this._parentRequest !== undefined) {
+      clearTimeout(this._parentRequest._callbackTimeout);
+    }
     const {metadata, 'payload': reply} = this._component._commandReply.getMessage(this);
 
     this._component._replyWith(metadata, reply);
   }
+
 
   /**
    *
