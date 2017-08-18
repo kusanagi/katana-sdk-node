@@ -5,6 +5,10 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
+## [1.1.7] - 2017-08-18
+## Fixed
+- Added request.done() handler to child responses to avoid async issues
+
 ## [1.1.6] - 2017-08-03
 ## Fixed
 - Improve param schema retrieval
