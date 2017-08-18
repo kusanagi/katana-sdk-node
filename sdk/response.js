@@ -1,6 +1,6 @@
 'use strict';
 
-/* eslint max-params: ["error", 13] */
+/* eslint max-params: ["error", 14] */
 
 const Api = require('./api');
 
@@ -26,12 +26,13 @@ class Response extends Api {
    * @param {string} protocol
    * @param {string} gatewayAddress
    * @param returnValue
+   * @param {Request} parentRequest
    */
   constructor(
     component, path, name, version, frameworkVersion, variables, debug,
     httpRequest, httpResponse, transport,
     protocol, gatewayAddress,
-    returnValue
+    returnValue, parentRequest
   ) {
     super(component, path, name, version, frameworkVersion, variables, debug);
 
@@ -41,6 +42,7 @@ class Response extends Api {
     this._return         = returnValue;
     this._protocol       = protocol;
     this._gatewayAddress = gatewayAddress;
+    this._parentRequest  = parentRequest;
   }
 
   /**

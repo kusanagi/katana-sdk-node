@@ -288,6 +288,16 @@ describe('Request', () => {
       expect(response.getHttpResponse().getStatusCode()).equal(statusCode);
       expect(response.getHttpResponse().getStatusText()).equal(statusText);
     });
+    it('should return a Response that has the current request as parent', () => {
+      const request = new Request(null, '', '', '', '', {}, false, mockHttpRequest, null,
+        '', '', '', '');
+      const statusCode = 200;
+      const statusText = 'OK';
+
+      const response = request.newResponse(statusCode, statusText);
+
+      expect(response._parentRequest).to.be.an.instanceOf(Request);
+    });
   });
 
 

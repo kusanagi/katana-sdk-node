@@ -220,7 +220,8 @@ class Request extends Api {
       new Transport(),
       this._protocol,
       this._gatewayAddress,
-      null
+      null,
+      this
     );
   }
 
