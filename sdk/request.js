@@ -1,6 +1,6 @@
 'use strict';
 
-/* eslint max-params: ["error", 13] */
+/* eslint max-params: ["error", 14] */
 
 const _            = require('lodash');
 const Api          = require('./api');
@@ -33,12 +33,13 @@ class Request extends Api {
    * @param {string} protocol
    * @param {string} gatewayAddress
    * @param {string} clientAddress
-   * @param {string} params
+   * @param {Object} params
+   * @param {Object} attributes
    */
   constructor(
     component, path, name, version, frameworkVersion, variables, debug,
     httpRequest, serviceCall,
-    protocol, gatewayAddress, clientAddress, params
+    protocol, gatewayAddress, clientAddress, params, attributes
   ) {
     super(component, path, name, version, frameworkVersion, variables, debug);
 
@@ -49,6 +50,7 @@ class Request extends Api {
     this._gatewayAddress = gatewayAddress;
     this._client         = clientAddress;
     this._params         = params || {};
+    this._attributes     = attributes || {};
   }
 
   /**
@@ -149,9 +151,23 @@ class Request extends Api {
     return this;
   }
 
-  // hasParam() implemented in base class API
-  // getParam() implemented in base class API
-  // getParams() implemented in base class API
+  /**
+   * Adds a new attribute to the request
+   *
+   * @param {string} name
+   * @param {string} value
+   * @return {Request}
+   */
+  setAttribute(name, value) {
+    if (!_.isString(name)) {
+      throw new Error('`name` must be a String');
+    } else if (!_.isString(value)) {
+      throw new Error('`value` must be a String');
+    }
+    this._attributes[name] = value;
+
+    return this;
+  }
 
   /**
    *
@@ -221,7 +237,8 @@ class Request extends Api {
       this._protocol,
       this._gatewayAddress,
       null,
-      this
+      this,
+      this._attributes
     );
   }
 

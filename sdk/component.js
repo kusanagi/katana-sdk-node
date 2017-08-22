@@ -252,7 +252,9 @@ class Component {
       this._mapper.getTransport(payload[m.command][m.arguments][m.transport]),
       payload[m.meta][m.protocol],
       payload[m.meta][m.gateway],
-      payload[m.command][m.arguments][m.return_value]
+      payload[m.command][m.arguments][m.return_value],
+      null,
+      payload[m.meta][m.attributes]
     );
   }
 
