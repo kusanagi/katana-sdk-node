@@ -254,7 +254,7 @@ class Component {
       payload[m.meta][m.gateway],
       payload[m.command][m.arguments][m.return_value],
       null,
-      payload[m.meta][m.attributes]
+      payload[m.command][m.arguments][m.meta][m.attributes]
     );
   }
 
