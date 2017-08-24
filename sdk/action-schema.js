@@ -405,7 +405,7 @@ class ActionSchema extends Schema {
    * @returns {Object}
    */
   getFiles() {
-    return this._files;
+    return Object.keys(this._files);
   }
 
   /**
