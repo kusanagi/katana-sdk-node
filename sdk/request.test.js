@@ -309,4 +309,29 @@ describe('Request', () => {
 
   });
 
+  describe('setAttribute()', () => {
+    it('should set a new attribute with the specified string to the request', () => {
+      let call = new ServiceCall(null, null, 'get');
+      const request = new Request(null, null, null, null, {}, false, mockHttpRequest, {}, call,
+        null, null, null, {params: {}});
+      request.setAttribute('foo', 'bar');
+      expect(request._attributes.foo).to.equal('bar');
+    });
+
+    it('should throw an error if the param `name` is not specified', () => {
+      let call = new ServiceCall(null, null, 'get');
+      const request = new Request(null, null, null, null, {}, false, mockHttpRequest, {}, call,
+        null, null, null, {params: {}});
+      expect(() => request.setAttribute(null, 'bar')).to.throw(/`name` must be a String/);
+    });
+
+    it('should throw an error if the param `value` is not specified', () => {
+      let call = new ServiceCall(null, null, 'get');
+      const request = new Request(null, null, null, null, {}, false, mockHttpRequest, {}, call,
+        null, null, null, {params: {}});
+      expect(() => request.setAttribute('foo', null)).to.throw(/`value` must be a String/);
+    });
+
+  });
+
 });

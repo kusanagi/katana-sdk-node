@@ -30,6 +30,7 @@ class Mapper {
    * @returns {Object}
    */
   getRequestMessage(requestApi) {
+
     return {
       [m.command_reply]: {
         [m.name]: requestApi.getName(),
@@ -44,7 +45,8 @@ class Mapper {
                 [m.name]: p.getName(),
               }
             )),
-          }
+          },
+          [m.attributes]: requestApi._attributes || {}
         }
       }
     };

@@ -5,6 +5,7 @@ const Mappings = {
   'actions': 'ac',
   'address': 'a',
   'accessible': 'a',
+  'attributes': 'a',
   'allow_empty': 'e',
   'arguments': 'a',
   'array_format': 'af',
