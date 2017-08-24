@@ -271,7 +271,7 @@ class Request extends Api {
 
   /**
    *
-   * @returns {[]}
+   * @returns {Param[]}
    */
   getParams() {
     return Object.keys(this._params).map(
