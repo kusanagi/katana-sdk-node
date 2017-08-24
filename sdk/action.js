@@ -50,7 +50,7 @@ class Action extends Api {
    * @return {Transport}
    */
   getTransport() {
-    return this._transport;
+    return Object.freeze(this._transport);
   }
 
   /**
