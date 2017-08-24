@@ -168,7 +168,7 @@ class Action extends Api {
 
   /**
    *
-   * @return {Array}
+   * @return {File[]}
    */
   getFiles() {
     return this._transport.getFiles().map((d) => this.getFile(d[m.name]));
@@ -399,7 +399,7 @@ for action: "${this._actionName}"`
    *
    * @param {string} link Link name
    * @param {string} uri Link URI
-   * @return {boolean}
+   * @return {Action}
    */
   setLink(link, uri) {
     if (_.isNil(link)) {
@@ -415,6 +415,7 @@ for action: "${this._actionName}"`
     }
 
     this._transport._setLink(this.getName(), link, uri);
+
     return this;
   }
 

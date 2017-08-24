@@ -26,6 +26,10 @@ const _data = Symbol('data');
  * Transport class
  */
 class Transport {
+  /**
+   *
+   * @param {Object} data
+   */
   constructor(data = defaultData) {
     this[_data] = Immutable.fromJS(data);
 
@@ -34,31 +38,63 @@ class Transport {
     }
   }
 
-  getAsObject() {
+  /**
+   *
+   * @return {Object}
+   * @protected
+   */
+  _getAsObject() {
     return this[_data].toJS();
   }
 
-  getMeta() {
+  /**
+   *
+   * @return {Object}
+   * @protected
+   */
+  _getMeta() {
     return this[_data].get(m.meta).toJS();
   }
 
+  /**
+   *
+   * @return {string}
+   */
   getRequestId() {
     return this[_data].getIn([m.meta, m.id]);
   }
 
+  /**
+   *
+   * @return {string}
+   */
   getRequestTimestamp() {
     return this[_data].getIn([m.meta, m.datetime]);
   }
 
+  /**
+   *
+   * @return {string[]}
+   */
   getOriginService() {
     return this[_data].hasIn([m.meta, m.origin]) ?
       this[_data].getIn([m.meta, m.origin]).toJS() : [];
   }
 
+  /**
+   *
+   * @return {number}
+   */
   getOriginDuration() {
     return  this[_data].getIn([m.meta, m.duration]).toJS();
   }
 
+  /**
+   *
+   * @param {string} name
+   * @param {string} defaultValue
+   * @return {string}
+   */
   getProperty(name, defaultValue = '') {
     if (_.isNil(name)) {
       throw new Error('Specify a property `name`');
@@ -69,14 +105,25 @@ class Transport {
     return this[_data].getIn(['meta', 'properties', name]) || defaultValue;
   }
 
+  /**
+   *
+   * @return {Object}
+   */
   getProperties() {
     return this[_data].getIn(['meta', 'properties']).toJS() || {};
   }
 
+  /**
+   * @return true
+   */
   hasDownload() {
     return this[_data].has(m.body);
   }
 
+  /**
+   *
+   * @return {File}
+   */
   getDownload() {
     if (!this.hasDownload()) {
       return null;
@@ -87,18 +134,35 @@ class Transport {
     return new File(m.body, path, mime, filename, size, token);
   }
 
+  /**
+   * @return {boolean}
+   */
   hasFiles() {
     return this[_data].has(m.files);
   }
 
+  /**
+   *
+   * @return {*}
+   */
   getFiles() {
     return this.hasFiles() ? this[_data].get(m.files).toJS() : null;
   }
 
+  /**
+   *
+   */
   hasData() {
     return this[_data].has(m.data);
   }
 
+  /**
+   *
+   * @param {string} service
+   * @param {string} version
+   * @param {string} action
+   * @return {Object}
+   */
   getData(service, version, action) {
     let d = this[_data].get(m.data);
 
@@ -118,10 +182,18 @@ class Transport {
     return d.toJS();
   }
 
+  /**
+   *
+   */
   hasRelations() {
     return this[_data].has('relations');
   }
 
+  /**
+   *
+   * @param {string} service
+   * @return {Object}
+   */
   getRelations(service) {
     let relations = this[_data].get('relations') || Immutable.Map({});
 
@@ -132,10 +204,18 @@ class Transport {
     return relations.toJS();
   }
 
+  /**
+   * @return {boolean}
+   */
   hasLinks() {
     return this[_data].has('links');
   }
 
+  /**
+   *
+   * @param {string} service
+   * @return {Object}
+   */
   getLinks(service) {
     let links = this[_data].get('links') || Immutable.Map({});
 
@@ -146,10 +226,18 @@ class Transport {
     return links.toJS();
   }
 
+  /**
+   * @return {boolean}
+   */
   hasCalls() {
     return this[_data].has('calls');
   }
 
+  /**
+   *
+   * @param {string} service
+   * @return {Object}
+   */
   getCalls(service) {
     let calls = this[_data].get('calls') || Immutable.Map({});
 
@@ -160,10 +248,18 @@ class Transport {
     return calls.toJS();
   }
 
+  /**
+   * @return {boolean}
+   */
   hasTransactions() {
     return this[_data].has('transactions');
   }
 
+  /**
+   *
+   * @param {string} service
+   * @return {Object}
+   */
   getTransactions(service) {
     let transactions = this[_data].get('transactions') || Immutable.Map({});
 
@@ -174,6 +270,11 @@ class Transport {
     return transactions.toJS();
   }
 
+  /**
+   *
+   * @param {string} service
+   * @return {Object}
+   */
   getErrors(service) {
     let errors = this[_data].get('errors') || Immutable.Map({});
 
@@ -184,15 +285,37 @@ class Transport {
     return errors.toJS();
   }
 
+  /**
+   *
+   * @param name
+   * @param value
+   * @private
+   */
   _setProperty(name, value) {
     this[_data] = this[_data].setIn(['meta', 'properties', name], value);
   }
 
+  /**
+   *
+   * @param service
+   * @param version
+   * @param action
+   * @param name
+   * @return {boolean}
+   */
   hasFile(service, version, action, name) {
     return this[_data]
       .hasIn([m.files, this._getGatewayPublicAddress(), service, version, action, name]);
   }
 
+  /**
+   *
+   * @param service
+   * @param version
+   * @param action
+   * @param name
+   * @return {File}
+   */
   getFile(service, version, action, name) {
     let getGatewayPublicAddress = this._getGatewayPublicAddress();
 
@@ -201,18 +324,37 @@ class Transport {
       .toJS();
   }
 
+  /**
+   *
+   */
   hasBody() {
     return this[_data].has(m.body);
   }
 
+  /**
+   *
+   */
   getBody() {
     return this[_data].get(m.body);
   }
 
+  /**
+   *
+   * @param file
+   * @private
+   */
   _setBody(file) {
     this[_data] = this[_data].setIn([m.body], file);
   }
 
+  /**
+   *
+   * @param service
+   * @param version
+   * @param action
+   * @param source
+   * @private
+   */
   _setData(service, version, action, source) {
 
     const gatewayPublicAddress = this._getGatewayPublicAddress();
@@ -221,10 +363,22 @@ class Transport {
     this[_data] = this[_data].setIn(path, Immutable.fromJS(source));
   }
 
+  /**
+   *
+   * @return {Object}
+   * @private
+   */
   _getGatewayPublicAddress() {
-    return this.getMeta()[m.gateway][1];
+    return this._getMeta()[m.gateway][1];
   }
 
+  /**
+   *
+   * @param name
+   * @param primaryKey
+   * @param service
+   * @param foreignKey
+   */
   relateOne(name, primaryKey, service, foreignKey) {
     this[_data] = this[_data].setIn(
       ['relations', this._getGatewayPublicAddress(), name, primaryKey, service],
@@ -232,6 +386,13 @@ class Transport {
     );
   }
 
+  /**
+   *
+   * @param name
+   * @param primaryKey
+   * @param service
+   * @param foreignKeys
+   */
   relateMany(name, primaryKey, service, foreignKeys) {
     this[_data] = this[_data].setIn(
       ['relations', this._getGatewayPublicAddress(), name, primaryKey, service],
@@ -239,7 +400,14 @@ class Transport {
     );
   }
 
-
+  /**
+   *
+   * @param name
+   * @param primaryKey
+   * @param address
+   * @param service
+   * @param foreignKey
+   */
   relateOneRemote(name, primaryKey, address, service, foreignKey) {
     this[_data] = this[_data].setIn(
       ['relations', this._getGatewayPublicAddress(), name, primaryKey, address, service],
@@ -247,6 +415,14 @@ class Transport {
     );
   }
 
+  /**
+   *
+   * @param name
+   * @param primaryKey
+   * @param address
+   * @param service
+   * @param foreignKeys
+   */
   relateManyRemote(name, primaryKey, address, service, foreignKeys) {
     this[_data] = this[_data].setIn(
       ['relations', this._getGatewayPublicAddress(), name, primaryKey, address, service],
@@ -254,10 +430,24 @@ class Transport {
     );
   }
 
+  /**
+   *
+   * @param name
+   * @param link
+   * @param uri
+   * @private
+   */
   _setLink(name, link, uri) {
     this[_data] = this[_data].setIn(['links', name, link], uri);
   }
 
+  /**
+   *
+   * @param type
+   * @param name
+   * @param version
+   * @param transaction
+   */
   registerTransaction(type, name, version, transaction) {
     let data;
     if (this[_data].hasIn(['transactions', type, name, version])) {
@@ -272,6 +462,13 @@ class Transport {
     // this[_data] = this[_data].mergeIn(['transactions', type, name, version], Immutable.fromJS([transaction]));
   }
 
+  /**
+   *
+   * @param service
+   * @param version
+   * @param action
+   * @param file
+   */
   addFile(service, version, action, file) {
     this[_data] = this[_data].setIn([m.files, service, version, action], Immutable.fromJS(file));
   }

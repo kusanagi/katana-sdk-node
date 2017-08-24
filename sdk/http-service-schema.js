@@ -24,7 +24,7 @@ class HttpServiceSchema extends Schema {
    *
    * @returns {boolean}
    */
-  isAccesible() {
+  isAccessible() {
     return this._accessible;
   }
 

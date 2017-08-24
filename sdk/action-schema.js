@@ -134,7 +134,7 @@ class ActionSchema extends Schema {
 
   /**
    *
-   * @returns {string|*}
+   * @returns {string}
    */
   getName() {
     return this._name;
@@ -189,7 +189,7 @@ class ActionSchema extends Schema {
 
   /**
    *
-   * @returns true
+   * @returns {boolean}
    */
   hasEntity() {
     return this._entity.hasDefinition();
@@ -366,7 +366,7 @@ class ActionSchema extends Schema {
 
   /**
    *
-   * @returns {Object}
+   * @returns {string[]}
    */
   getParams() {
     return this._params.map((param) =>
@@ -402,7 +402,7 @@ class ActionSchema extends Schema {
 
   /**
    *
-   * @returns {Object}
+   * @returns {string[]}
    */
   getFiles() {
     return Object.keys(this._files);
@@ -420,7 +420,7 @@ class ActionSchema extends Schema {
   /**
    *
    * @param {string} name
-   * @returns {*}
+   * @returns {FileSchema}
    */
   getFileSchema(name) {
     if (!this.hasFile(name)) {

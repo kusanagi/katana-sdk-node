@@ -82,7 +82,7 @@ class Response extends Api {
    * @returns {Transport}
    */
   getTransport() {
-    return this._transport;
+    return Object.freeze(this._transport);
   }
 
   /**
@@ -93,7 +93,7 @@ class Response extends Api {
   }
 
   /**
-   * @return {boolean}
+   * @return {array|number|boolean|string}
    */
   getReturn() {
     return this._return;
@@ -101,8 +101,9 @@ class Response extends Api {
 
   /**
    * @return {array|number|boolean|string}
+   * @protected
    */
-  getReturnType() {
+  _getReturnType() {
     if (this.return) {
       return this.return;
     }

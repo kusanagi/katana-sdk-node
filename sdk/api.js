@@ -133,7 +133,7 @@ class Api {
    * Get variable value
    *
    * @param {string} name Name of the variable
-   * @return {string|null}
+   * @return {string}
    */
   getVariable(name) {
     return this._variables[name] || null;

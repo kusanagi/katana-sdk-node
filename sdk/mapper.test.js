@@ -55,7 +55,7 @@ describe('mapper', () => {
       const mapper    = new Mapper();
       const transport = mapper.getTransport(mockRequestTransport[m.command][m.arguments]);
       expect(transport).to.be.an.instanceOf(Transport);
-      expect(transport.getMeta()[m.gateway][1]).to.equal('http://10.0.2.15:9999');
+      expect(transport._getMeta()[m.gateway][1]).to.equal('http://10.0.2.15:9999');
     });
 
   });
@@ -70,7 +70,7 @@ describe('mapper', () => {
       );
       const mock = sinon.mock(resp);
       mock.expects('hasReturn').once().returns(true);
-      mock.expects('getReturnType').once().returns(null);
+      mock.expects('_getReturnType').once().returns(null);
       let payload = mapper.getResponseMessage(resp);
       expect(payload[m.command_reply][m.result][m.response_return]);
     });

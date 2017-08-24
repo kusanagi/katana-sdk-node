@@ -31,7 +31,7 @@ class ParamSchema extends Schema {
    * @param {number} maxItems
    * @param {number} minItems
    * @param {string} uniqueItems
-   * @param {array} enumList
+   * @param {string[]} enumList
    * @param {number} multipleOf
    * @param {HttpParamSchema} httpParamSchema
    *
@@ -250,6 +250,10 @@ class ParamSchema extends Schema {
     return this._uniqueItems;
   }
 
+  /**
+   *
+   * @returns {string[]}
+   */
   getEnum() {
     return this._enumList;
   }

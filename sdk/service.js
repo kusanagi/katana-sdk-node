@@ -13,6 +13,11 @@ class Service extends Component {
     super(options);
   }
 
+  /**
+   * Register a new action callback
+   * @param {string} name
+   * @param {function} callback
+   */
   action(name, callback) {
     this._setCallback(name, callback);
   }
@@ -42,6 +47,7 @@ class Service extends Component {
 
   /**
    * @param {Action} action The action request
+   * @private
    */
   runAction(action) {
     const actionName = action.getActionName();

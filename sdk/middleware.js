@@ -17,6 +17,7 @@ class Middleware extends Component {
    *
    * @param {string} actionName
    * @param {Object} payload
+   * @private
    */
   _processCommand(actionName, payload) {
     logger.debug('Incoming command', JSON.stringify(payload));

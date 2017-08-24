@@ -45,6 +45,7 @@ class Component {
   /**
    *
    * @param {Error} error
+   * @private
    */
   _handleUncaughtException(error) {
     logger.error('Uncaught exception', error.toString(), error.stack);
@@ -56,6 +57,7 @@ class Component {
    * @param {string} message
    * @param {number} code
    * @param {string} status
+   * @protected
    */
   _replyWithError(message, code, status) {
     logger.debug('Replying with error');
@@ -71,11 +73,19 @@ class Component {
     this._replyWith('\x00', errorPayload);
   }
 
+  /**
+   *
+   * @private
+   */
   _readCLIOptions() {
     this.cli           = cli.parse();
     this.logger.setLevel(this.cli.debug ? logger.levels.DEBUG : logger.levels.INFO);
   }
 
+  /**
+   *
+   * @private
+   */
   _runStartup() {
     if (!this._startup) {
       return;
@@ -88,6 +98,10 @@ class Component {
     }
   }
 
+  /**
+   *
+   * @private
+   */
   _runShutdown() {
     if (!this._shutdown) {
       return;
@@ -100,6 +114,11 @@ class Component {
     }
   }
 
+  /**
+   *
+   * @param error
+   * @protected
+   */
   _runError(error) {
     if (!this._error) {
       return;
@@ -112,6 +131,10 @@ class Component {
     }
   }
 
+  /**
+   *
+   * @private
+   */
   _softExit() {
     if (this.busy) {
       logger.warning('Component busy. Waiting before shutdown');
@@ -122,6 +145,11 @@ class Component {
 
     this._hardExit();
   }
+
+  /**
+   *
+   * @private
+   */
   _hardExit() {
     logger.debug('Hard exit. Busy: ' + this.busy);
     this._runShutdown();
@@ -129,6 +157,10 @@ class Component {
     this.process.exit(0);
   }
 
+  /**
+   *
+   * @private
+   */
   _closeSocket() {
     try {
       this.socket && this.socket.close();
@@ -137,6 +169,12 @@ class Component {
     }
   }
 
+  /**
+   *
+   * @param metadata
+   * @param payload
+   * @protected
+   */
   _replyWith(metadata, payload) {
     this.busy = true;
     // To check out the output payload, it's better to use katana service/middleware start --transport
@@ -146,6 +184,13 @@ class Component {
     this.busy = false;
   }
 
+  /**
+   *
+   * @param rawActionName
+   * @param encodedMapping
+   * @param encodedPayload
+   * @private
+   */
   _processMessage(rawActionName, encodedMapping, encodedPayload) {
     const actionName = rawActionName.toString();
     const payload    = msgpack.unpack(encodedPayload);
@@ -169,6 +214,11 @@ class Component {
   //   throw new Error('Must be implemented in child class');
   // }
 
+  /**
+   *
+   * @param newMapping
+   * @private
+   */
   _saveNewMapping(newMapping) {
     let list = [];
     Object.keys(newMapping).forEach((serviceName) => {
@@ -187,6 +237,13 @@ class Component {
     this.servicesMapping = list;
   }
 
+  /**
+   *
+   * @param actionName
+   * @param payload
+   * @return {Action}
+   * @private
+   */
   _getAction(actionName, payload) {
     if (!payload) {
       throw new Error('Cannot create action without data');
@@ -213,6 +270,12 @@ class Component {
     );
   }
 
+  /**
+   *
+   * @param payload
+   * @return {Request}
+   * @protected
+   */
   _getRequest(payload) {
     if (!payload) {
       throw new Error('Cannot create Request without data');
@@ -234,6 +297,12 @@ class Component {
     );
   }
 
+  /**
+   *
+   * @param payload
+   * @return {Response}
+   * @protected
+   */
   _getResponse(payload) {
     if (!payload) {
       throw new Error('Cannot create Response without data');
@@ -256,6 +325,12 @@ class Component {
     );
   }
 
+  /**
+   *
+   * @param source
+   * @return {{}}
+   * @private
+   */
   _getParamsAsMap(source = []) {
     let params = {};
 
@@ -267,7 +342,13 @@ class Component {
     return params;
   }
 
-  // https://github.com/kusanagi/katana-sdk-spec#34-string-representation
+  /**
+   *
+   * @see https://github.com/kusanagi/katana-sdk-spec#34-string-representation
+   * @param value
+   * @return {*}
+   * @private
+   */
   _getAsString(value) {
     if (value === null) {
       return 'NULL';
@@ -292,22 +373,42 @@ class Component {
     return 'Unknown value type';
   }
 
+  /**
+   *
+   * @param name
+   * @param callable
+   * @private
+   */
   _setCallback(name, callable) {
     this.callbacks[name] = callable;
   }
 
+  /**
+   *
+   * @param callable
+   * @private
+   */
   _assertValidCallableType(callable) {
     if (typeof callable !== 'function') {
       throw new Error('Argument `callable` must be of type \'function\'');
     }
   }
 
+  /**
+   *
+   * @param callable
+   * @private
+   */
   _assertCallableProvided(callable) {
     if (callable === undefined) {
       throw new Error('Argument `callable` is required');
     }
   }
 
+  /**
+   *
+   * @private
+   */
   _initZMQCommunication() {
     this.socket = zeromq.socket('rep');
 

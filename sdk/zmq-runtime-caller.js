@@ -40,7 +40,7 @@ class ZMQRuntimeCaller {
             version,
             targetAction
           ],
-          [m.transport]: action.getTransport().getAsObject(),
+          [m.transport]: action.getTransport()._getAsObject(),
           [m.params]: params,
           [m.files]: files,
         },

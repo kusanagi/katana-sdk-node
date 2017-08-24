@@ -7,35 +7,71 @@ const File = require('./file');
 
 const _data = Symbol('data');
 
+/**
+ *
+ */
 class HttpRequest {
+  /**
+   *
+   * @param {Object} data Initial request data
+   */
   constructor(data) {
     this[_data] = Immutable.fromJS(data);
   }
 
+  /**
+   *
+   * @param {string} method
+   * @return {boolean}
+   */
   isMethod(method) {
     return this[_data].get('method').toLowerCase() === method.toLowerCase();
   }
 
+  /**
+   *
+   * @return {string}
+   */
   getMethod() {
     return this[_data].get('method').toUpperCase();
   }
 
+  /**
+   *
+   * @return {string}
+   */
   getUrl() {
     return this[_data].get('url');
   }
 
+  /**
+   *
+   * @return {string}
+   */
   getUrlScheme() {
     return url.parse(this[_data].get('url')).protocol;
   }
 
+  /**
+   * @return {string}
+   */
   getUrlHost() {
     return url.parse(this[_data].get('url')).host;
   }
 
+  /**
+   *
+   * @return {string}
+   */
   getUrlPath() {
     return url.parse(this[_data].get('url')).pathname;
   }
 
+  /**
+   *
+   * @param {string} name
+   * @return {boolean}
+   */
   hasQueryParam(name) {
     if (_.isNil(name)) {
       throw new Error('Specify a param `name`');
@@ -46,6 +82,12 @@ class HttpRequest {
     return this[_data].hasIn(['query', name]);
   }
 
+  /**
+   *
+   * @param {string} name
+   * @param {string} defaultValue
+   * @return {string}
+   */
   getQueryParam(name, defaultValue = '') {
     if (_.isNil(name)) {
       throw new Error('Specify a param `name`');
@@ -57,6 +99,12 @@ class HttpRequest {
       this[_data].getIn(['query', name, 0]) : defaultValue;
   }
 
+  /**
+   *
+   * @param {string} name
+   * @param {string} defaultValue
+   * @return {string}
+   */
   getQueryParamArray(name, defaultValue) {
     if (_.isNil(name)) {
       throw new Error('Specify a param `name`');
@@ -80,7 +128,7 @@ class HttpRequest {
 
   /**
    *
-   * @return {Array}
+   * @return {string[]}
    */
   getQueryParams() {
     const queryParams = this.getQueryParamsArray();
@@ -95,6 +143,11 @@ class HttpRequest {
     return this[_data].getIn(['query']).toJS();
   }
 
+  /**
+   *
+   * @param {string} name
+   * @return {boolean}
+   */
   hasPostParam(name) {
     if (_.isNil(name)) {
       throw new Error('Specify a param `name`');
@@ -105,6 +158,12 @@ class HttpRequest {
     return this[_data].hasIn(['postData', name]);
   }
 
+  /**
+   *
+   * @param name
+   * @param defaultValue
+   * @return {*}
+   */
   getPostParam(name, defaultValue = '') {
     if (_.isNil(name)) {
       throw new Error('Specify a param `name`');
@@ -116,6 +175,12 @@ class HttpRequest {
       this[_data].getIn(['postData', name, 0]) : defaultValue;
   }
 
+  /**
+   *
+   * @param name
+   * @param defaultValue
+   * @return {any | *}
+   */
   getPostParamArray(name, defaultValue) {
     if (_.isNil(name)) {
       throw new Error('Specify a param `name`');
@@ -138,7 +203,7 @@ class HttpRequest {
   }
 
   /**
-   * @return {Object}
+   * @return {Object[]}
    */
   getPostParamsArray() {
     return this[_data].get('postData').toJS();
@@ -146,7 +211,7 @@ class HttpRequest {
 
   /**
    *
-   * @return {Array}
+   * @return {Object[]}
    */
   getPostParams() {
     const paramsMap = this.getPostParams();
@@ -171,10 +236,18 @@ class HttpRequest {
     return this[_data].get('version') === version;
   }
 
+  /**
+   * @return {string}
+   */
   getProtocolVersion() {
     return this[_data].get('version');
   }
 
+  /**
+   *
+   * @param {string} name
+   * @return {boolean}
+   */
   hasHeader(name) {
     if (_.isNil(name)) {
       throw new Error('Specify a header `name`');
@@ -185,6 +258,12 @@ class HttpRequest {
     return this[_data].hasIn(['headers', name]);
   }
 
+  /**
+   *
+   * @param {string} name
+   * @param {string} defaultValue
+   * @return {string}
+   */
   getHeader(name, defaultValue = '') {
     if (_.isNil(name)) {
       throw new Error('Specify a header `name`');
@@ -204,6 +283,11 @@ class HttpRequest {
   getHeaderArray() {
     throw new Error('Not implemented');
   }
+
+  /**
+   *
+   * @return {Object}
+   */
   getHeaders() {
     return this[_data].has('headers') ? this[_data].get('headers').toJS() : {};
   }
@@ -214,14 +298,28 @@ class HttpRequest {
   getHeadersArray() {
     throw new Error('Not implemented');
   }
+
+  /**
+   *
+   * @return {boolean}
+   */
   hasBody() {
     return this[_data].has('body') && this[_data].get('body').length > 0;
   }
 
+  /**
+   *
+   * @return {string}
+   */
   getBody() {
     return this[_data].get('body') || '';
   }
 
+  /**
+   *
+   * @param name
+   * @return {boolean}
+   */
   hasFile(name) {
     if (_.isNil(name)) {
       throw new Error('Specify a file `name`');
@@ -232,6 +330,11 @@ class HttpRequest {
     return this[_data].hasIn(['files', name]);
   }
 
+  /**
+   *
+   * @param name
+   * @return {File}
+   */
   getFile(name) {
     if (_.isNil(name)) {
       throw new Error('Specify a file `name`');
@@ -242,6 +345,10 @@ class HttpRequest {
     return this[_data].getIn(['files', name]) || new File(name, '');
   }
 
+  /**
+   *
+   * @return {File[]}
+   */
   getFiles() {
     return this[_data].get('files').toJS();
   }

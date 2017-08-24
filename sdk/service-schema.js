@@ -88,7 +88,7 @@ class ServiceSchema extends Schema {
 
   /**
    *
-   * @returns {Array}
+   * @returns {Object[]}
    */
   getActions() {
     return Object.keys(this._actions);
