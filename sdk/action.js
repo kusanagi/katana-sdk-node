@@ -709,7 +709,7 @@ for action: "${this._actionName}"`
 
   /**
    *
-   * @returns {[]}
+   * @returns {Param[]}
    */
   getParams() {
     return Object.keys(this._params).map(

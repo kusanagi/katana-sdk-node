@@ -14,8 +14,8 @@ class HttpActionSchema extends Schema {
    * @param {string} method
    * @param {string} path
    * @param {string} input
-   * @param {[string]} body Defines the expected MIME type of the HTTP request body for methods other
-   * than "get", "options" and "head", which MAY include multiple MIME types, defaults to ["application/x-www-form-urlencoded", "multipart/form-data", "text/plain"] (array)
+   * @param {string[]} body Defines the expected MIME type of the HTTP request body for methods
+   * other than "get", "options" and "head", which MAY include multiple MIME types, defaults to ["application/x-www-form-urlencoded", "multipart/form-data", "text/plain"] (array)
    */
   constructor(accessible, method, path, input, body = ['text/plain']) {
     super();

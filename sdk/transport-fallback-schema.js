@@ -10,10 +10,10 @@ class TransportFallbackSchema extends Schema {
   /**
    *
    * @param {Object} properties
-   * @param {[]} data
-   * @param {[]} relations
+   * @param {Object[]} data
+   * @param {Object[]} relations
    * @param {Object} links
-   * @param {[]} errors
+   * @param {Object[]} errors
    */
   constructor(properties = {}, data = [], relations = [], links = {}, errors = []) {
     super();

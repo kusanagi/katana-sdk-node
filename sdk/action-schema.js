@@ -27,10 +27,10 @@ class ActionSchema extends Schema {
    * @param {boolean} deprecated
    * @param {Object} params
    * @param {Object} files
-   * @param {[]} relations
-   * @param {[]} calls
-   * @param {[]} deferredCalls
-   * @param {[]} remoteCalls
+   * @param {ActionRelationSchema[]} relations
+   * @param {Object[]} calls
+   * @param {Object[]} deferredCalls
+   * @param {Object[]} remoteCalls
    * @param {ReturnValueSchema} returnValueSchema
    */
   constructor(
@@ -213,7 +213,7 @@ class ActionSchema extends Schema {
 
   /**
    *
-   * @returns {[]}
+   * @returns {ActionRelationSchema[]}
    */
   getRelations() {
     return this._relations;
@@ -221,7 +221,7 @@ class ActionSchema extends Schema {
 
   /**
    *
-   * @param {[]} source
+   * @param {Object[]} source
    * @param {string} name
    * @param {string} version
    * @param {string} action
@@ -267,7 +267,7 @@ class ActionSchema extends Schema {
 
   /**
    *
-   * @returns {[]}
+   * @returns {Object[]}
    */
   getCalls() {
     return this._calls;
@@ -294,7 +294,7 @@ class ActionSchema extends Schema {
 
   /**
    *
-   * @returns {[]}
+   * @returns {Object[]}
    */
   getDeferCalls() {
     return this._deferredCalls;
@@ -342,7 +342,7 @@ class ActionSchema extends Schema {
 
   /**
    *
-   * @returns {[]}
+   * @returns {Object[]}
    */
   getRemoteCalls() {
     return this._remoteCalls;
