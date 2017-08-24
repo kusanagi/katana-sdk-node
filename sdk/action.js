@@ -640,11 +640,18 @@ for action: "${this._actionName}"`
    * Set the action result as an error
    *
    * @param {string} message Natural language description of the error
-   * @param {string} [code=0] Code to be defined for the error
+   * @param {int} [code=0] Code to be defined for the error
    * @param {string} [status] Status code to be defined for the error
    * @return {boolean}
    */
   error(message, code = 0, status) {
+    if (!_.isInteger(code)) {
+      throw new TypeError('The param `code` must be an integer');
+    } else if (!_.isString(message)) {
+      throw new TypeError('The param `message` must be a string');
+    } else if (!_.isString(status)) {
+      throw new TypeError('The param `status` must be a string');
+    }
     const error = {
       [m.message]: message,
       [m.code]: code,
