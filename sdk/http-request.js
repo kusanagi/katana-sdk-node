@@ -198,10 +198,22 @@ class HttpRequest {
       this[_data].getIn(['headers', name], defaultValue);
   }
 
+  /**
+   *
+   */
+  getHeaderArray() {
+    throw new Error('Not implemented');
+  }
   getHeaders() {
     return this[_data].has('headers') ? this[_data].get('headers').toJS() : {};
   }
 
+  /**
+   *
+   */
+  getHeadersArray() {
+    throw new Error('Not implemented');
+  }
   hasBody() {
     return this[_data].has('body') && this[_data].get('body').length > 0;
   }

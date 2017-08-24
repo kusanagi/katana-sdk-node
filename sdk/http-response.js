@@ -101,8 +101,21 @@ class HttpResponse {
       this[_data].getIn(['headers', name], defaultValue);
   }
 
+  /**
+   * @return {string[]}
+    */
+  getHeaderArray() {
+    throw new Error('Not implemented');
+  }
   getHeaders() {
     return this[_data].has('headers') ? this[_data].get('headers').toJS() : {};
+  }
+
+  /**
+   * @return {Object[]}
+   */
+  getHeadersArray() {
+    throw new Error('Not implemented');
   }
 
   setHeader(name, value) {

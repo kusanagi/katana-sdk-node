@@ -55,6 +55,22 @@ class Request extends Api {
    *
    * @returns {string}
    */
+  getId() {
+    throw new Error('Not implemented');
+  }
+
+  /**
+   *
+   * @returns {string}
+   */
+  getTimestamp() {
+    throw new Error('Not implemented');
+  }
+
+  /**
+   *
+   * @returns {string}
+   */
   getGatewayProtocol() {
     return this._protocol;
   }
