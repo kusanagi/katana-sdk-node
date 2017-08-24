@@ -479,9 +479,17 @@ describe('Action', () => {
 
 
 
-  xdescribe('error()', () => {
-    it('registers an error', () => {
-
+  describe('error()', () => {
+    it('validates action error params', () => {
+      const mockTransport = {[m.meta]: {[m.origin]: ['users', '1.0'], [m.gateway]: ['', '']}};
+      const transport = new Transport(mockTransport);
+      const action = new Action(null, null, 'dev', '1.0', null, {}, false, 'read', {}, transport);
+      assert.throws(() =>
+        action.error(0), /The param `message` must be a string/);
+      assert.throws(() =>
+        action.error('test', '0'), /The param `code` must be an integer/);
+      assert.throws(() =>
+        action.error('test', 404, 1), /The param `status` must be a string/);
     });
   });
 
