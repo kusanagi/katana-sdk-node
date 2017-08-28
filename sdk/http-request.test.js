@@ -278,7 +278,7 @@ describe('HttpRequest', () => {
 
   describe('getHeader()', () => {
     it('should return the header with the specified `name`', () => {
-      const headers = {'Content-Type': 'test'};
+      const headers = {'Content-Type': ['test']};
       const _mockRequest = _.merge({headers}, mockRequest);
       const httpRequest = new HttpRequest(_mockRequest);
       assert.equal(httpRequest.getHeader('Content-Type'), 'test');
@@ -289,7 +289,6 @@ describe('HttpRequest', () => {
       const _mockRequest = _.merge({headers}, mockRequest);
       const httpRequest  = new HttpRequest(_mockRequest);
       const defaultValue = 'text/plain';
-
       assert.equal(httpRequest.getHeader('Content-Type', defaultValue), defaultValue);
     });
 
@@ -299,17 +298,61 @@ describe('HttpRequest', () => {
     });
   });
 
-  describe('getHeaders()', () => {
-    it('should return all headers', () => {
-      const headers = {'Content-Type': 'test'};
+  describe('getHeaderArray()', () => {
+    it('should return the header array with the specified `name`', () => {
+      const headers = {'Content-Type': ['test', 'tast']};
       const _mockRequest = _.merge({headers}, mockRequest);
       const httpRequest = new HttpRequest(_mockRequest);
-      assert.deepEqual(httpRequest.getHeaders(), headers);
+      assert.deepEqual(httpRequest.getHeaderArray('Content-Type'), ['test', 'tast']);
+    });
+
+    it('should return the default value when header is not present', () => {
+      const headers      = {};
+      const _mockRequest = _.merge({headers}, mockRequest);
+      const httpRequest  = new HttpRequest(_mockRequest);
+      const defaultValue = 'text/plain';
+      assert.deepEqual(httpRequest.getHeaderArray('Content-Type', defaultValue), defaultValue);
+    });
+
+    it('should return the empty array if no defaultValue is present', () => {
+      const headers      = {};
+      const _mockRequest = _.merge({headers}, mockRequest);
+      const httpRequest  = new HttpRequest(_mockRequest);
+
+      assert.deepEqual(httpRequest.getHeaderArray('Content-Type'), []);
+    });
+
+    it('should throw an error if no header `name` specified', () => {
+      const httpRequest = new HttpRequest(mockRequest);
+      assert.throws(httpRequest.getHeaderArray, /Specify a header `name`/);
+    });
+  });
+
+  describe('getHeaders()', () => {
+    it('should return all headers', () => {
+      const headers = {'Content-Type': ['test', 'tast']};
+      const _mockRequest = _.merge({headers}, mockRequest);
+      const httpRequest = new HttpRequest(_mockRequest);
+      assert.deepEqual(httpRequest.getHeaders(), {'Content-Type': 'test'});
     });
 
     it('should return an empty set of headers when none are set', () => {
       const httpRequest = new HttpRequest(mockRequest);
       assert.deepEqual(httpRequest.getHeaders(), {});
+    });
+  });
+
+  describe('getHeaderArray()', () => {
+    it('should return all headers as arrays', () => {
+      const headers = {'Content-Type': ['test', 'tast']};
+      const _mockRequest = _.merge({headers}, mockRequest);
+      const httpRequest = new HttpRequest(_mockRequest);
+      assert.deepEqual(httpRequest.getHeadersArray(), headers);
+    });
+
+    it('should return an empty set of headers when none are set', () => {
+      const httpRequest = new HttpRequest(mockRequest);
+      assert.deepEqual(httpRequest.getHeadersArray(), []);
     });
   });
 
