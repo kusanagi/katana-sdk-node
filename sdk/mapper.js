@@ -75,7 +75,7 @@ class Mapper {
       }
     };
     if (responseApi.hasReturn()) {
-      payload[m.command_reply][m.result][m.response_return] = responseApi.getReturnType();
+      payload[m.command_reply][m.result][m.response_return] = responseApi._getReturnType();
     }
     return payload;
   }
@@ -184,7 +184,7 @@ class Mapper {
 
   getTransportMessage(transport) {
     const transportMessage = {
-      [m.meta]: transport.getMeta()
+      [m.meta]: transport._getMeta()
     };
 
     if (transport.hasFiles()) {

@@ -83,7 +83,7 @@ describe('ServiceSchema', () => {
       const schema = ServiceSchema.fromMapping(name, version, mockServiceMapping);
       expect(schema).to.be.an.instanceOf(ServiceSchema);
 
-      expect(schema.getHttpSchema().isAccesible()).to.equal(true);
+      expect(schema.getHttpSchema().isAccessible()).to.equal(true);
       expect(schema.getHttpSchema().getBasePath()).to.equal('/1.0');
     });
 
@@ -182,7 +182,7 @@ describe('ServiceSchema', () => {
       const httpSchema  = new HttpServiceSchema(true, '/');
       let serviceSchema = new ServiceSchema(null, null, null, httpSchema);
       expect(serviceSchema.getHttpSchema()).to.equal(httpSchema);
-      expect(serviceSchema.getHttpSchema().isAccesible()).to.equal(true);
+      expect(serviceSchema.getHttpSchema().isAccessible()).to.equal(true);
       expect(serviceSchema.getHttpSchema().getBasePath()).to.equal('/');
     });
 

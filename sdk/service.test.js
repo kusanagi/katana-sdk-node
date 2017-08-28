@@ -45,7 +45,7 @@ describe('Service', function () {
       return;
     }
 
-    throw Error('Calling an unknown action did not trigger an error');
+    throw new Error('Calling an unknown action did not trigger an error');
   });
 
   it('should run defined actions', (done) => {

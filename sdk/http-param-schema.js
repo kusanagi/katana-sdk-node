@@ -5,6 +5,12 @@ const m      = require('./mappings');
 
 class HttpParamSchema extends Schema {
 
+  /**
+   *
+   * @param {boolean} accessible
+   * @param {string} input
+   * @param {string} param
+   */
   constructor(accessible, input = 'query', param) {
     super();
 
@@ -13,6 +19,12 @@ class HttpParamSchema extends Schema {
     this._param      = param;
   }
 
+  /**
+   *
+   * @param mapping
+   * @returns {HttpParamSchema}
+   * @private
+   */
   static fromMapping(mapping) {
     const accessible = this.readProperty(mapping, m.accessible, false);
     const input      = this.readProperty(mapping, m.input, 'query');
@@ -25,14 +37,26 @@ class HttpParamSchema extends Schema {
     );
   }
 
+  /**
+   *
+   * @returns {boolean}
+   */
   isAccesible() {
     return this._accessible;
   }
 
+  /**
+   *
+   * @returns {string}
+   */
   getInput() {
     return this._input;
   }
 
+  /**
+   *
+   * @returns {string}
+   */
   getParam() {
     return this._param;
   }
