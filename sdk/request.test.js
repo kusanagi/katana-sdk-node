@@ -23,21 +23,30 @@ describe('Request', () => {
     expect(request).to.be.an.instanceOf(Request);
   });
 
-  xdescribe('getGatewayProtocol()', () => {
+  describe('getGatewayProtocol()', () => {
     it('returns the protocol implemented by the Gateway component ', () => {
-
+      let call = new ServiceCall(null, null, 'get');
+      const request = new Request(null, null, null, null, {}, '1.0.0', false, mockHttpRequest,
+        call, 'http', null, null, {params: {}});
+      expect(request.getGatewayProtocol()).to.equal('http');
     });
   });
 
-  xdescribe('getGatewayAddress()', () => {
+  describe('getGatewayAddress()', () => {
     it('returns the public address of the Gateway component ', () => {
-
+      let call = new ServiceCall(null, null, 'get');
+      const request = new Request(null, null, null, null, {}, '1.0.0', false, mockHttpRequest,
+        call, 'http', '127.0.0.1', null, {params: {}});
+      expect(request.getGatewayAddress()).to.equal('127.0.0.1');
     });
   });
 
-  xdescribe('getClientAddress()', () => {
+  describe('getClientAddress()', () => {
     it('returns the IP address and port of the client which sent the request', () => {
-
+      let call = new ServiceCall(null, null, 'get');
+      const request = new Request(null, null, null, null, {}, '1.0.0', false, mockHttpRequest,
+        call, 'http', null, '127.0.0.2', {params: {}});
+      expect(request.getClientAddress()).to.equal('127.0.0.2');
     });
   });
 
@@ -301,12 +310,13 @@ describe('Request', () => {
   });
 
 
-  xdescribe('getHttpRequest()', () => {
-
+  describe('getHttpRequest()', () => {
     it('returns the instance of the HttpRequest for this Request', () => {
-
+      let call = new ServiceCall(null, null, 'get');
+      const request = new Request(null, null, null, null, {}, '1.0.0', false, mockHttpRequest, {},
+        call, null, null, null, {params: {}});
+      expect(request.getHttpRequest()).to.be.an.instanceOf(HttpRequest);
     });
-
   });
 
   describe('setAttribute()', () => {
@@ -330,6 +340,26 @@ describe('Request', () => {
       const request = new Request(null, null, null, null, {}, false, mockHttpRequest, {}, call,
         null, null, null, {params: {}});
       expect(() => request.setAttribute('foo', null)).to.throw(/`value` must be a String/);
+    });
+
+  });
+
+  describe('getId()', () => {
+    it('should get the uuid-4 ID of the request', () => {
+      let call = new ServiceCall(null, null, 'get');
+      const request = new Request(null, null, null, null, {}, false, mockHttpRequest, {}, call,
+        null, null, null, {params: {}}, null, 'f1b27da9-240b-40e3-99dd-a567e4498ed7');
+      expect(request.getId()).to.equal('f1b27da9-240b-40e3-99dd-a567e4498ed7');
+    });
+
+  });
+
+  describe('getTimestamp()', () => {
+    it('should get the creation timestamp of the request', () => {
+      let call = new ServiceCall(null, null, 'get');
+      const request = new Request(null, null, null, null, {}, false, mockHttpRequest, {}, call,
+        null, null, null, {params: {}}, null, '', '2016-04-12T02:49:05.692');
+      expect(request.getTimestamp()).to.equal('2016-04-12T02:49:05.692');
     });
 
   });

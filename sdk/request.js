@@ -1,6 +1,6 @@
 'use strict';
 
-/* eslint max-params: ["error", 14] */
+/* eslint max-params: ["error", 16] */
 
 const _            = require('lodash');
 const Api          = require('./api');
@@ -35,11 +35,13 @@ class Request extends Api {
    * @param {string} clientAddress
    * @param {Object} params
    * @param {Object} attributes
+   * @param {string} id
+   * @param {string} timestamp
    */
   constructor(
     component, path, name, version, frameworkVersion, variables, debug,
     httpRequest, serviceCall,
-    protocol, gatewayAddress, clientAddress, params, attributes
+    protocol, gatewayAddress, clientAddress, params, attributes, id, timestamp
   ) {
     super(component, path, name, version, frameworkVersion, variables, debug);
 
@@ -51,6 +53,8 @@ class Request extends Api {
     this._client         = clientAddress;
     this._params         = params || {};
     this._attributes     = attributes || {};
+    this._id             = id;
+    this._timestamp      = timestamp;
   }
 
   /**
@@ -58,7 +62,7 @@ class Request extends Api {
    * @returns {string}
    */
   getId() {
-    throw new Error('Not implemented');
+    return this._id;
   }
 
   /**
@@ -66,7 +70,7 @@ class Request extends Api {
    * @returns {string}
    */
   getTimestamp() {
-    throw new Error('Not implemented');
+    return this._timestamp;
   }
 
   /**
