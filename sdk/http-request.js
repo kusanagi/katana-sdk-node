@@ -280,8 +280,17 @@ class HttpRequest {
   /**
    *
    */
-  getHeaderArray() {
-    throw new Error('Not implemented');
+  getHeaderArray(name, defaultValue = []) {
+    if (_.isNil(name)) {
+      throw new Error('Specify a header `name`');
+    } else if (!_.isString(name)) {
+      throw new TypeError('The header `name` must be a string');
+    }
+
+    return this[_data].getIn(['headers', name]) ?
+      this[_data].getIn(['headers', name]).toJS()
+      :
+      defaultValue;
   }
 
   /**
@@ -289,14 +298,22 @@ class HttpRequest {
    * @return {Object}
    */
   getHeaders() {
-    return this[_data].has('headers') ? this[_data].get('headers').toJS() : {};
+    if (!this[_data].has('headers')) {
+      return {};
+    }
+    const headers = this[_data].get('headers').toJS();
+    let headersObject = {};
+    Object.keys(headers).map((key) => {
+      headersObject[key] = this[_data].getIn(['headers', key]).get(0);
+    });
+    return headersObject;
   }
 
   /**
    *
    */
   getHeadersArray() {
-    throw new Error('Not implemented');
+    return this[_data].has('headers') ? this[_data].get('headers').toJS() : [];
   }
 
   /**

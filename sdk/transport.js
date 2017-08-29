@@ -166,6 +166,10 @@ class Transport {
   getData(service, version, action) {
     let d = this[_data].get(m.data);
 
+    if (!d) {
+      return [];
+    }
+
     if (service) {
       const gatewayPublicAddress = this._getGatewayPublicAddress();
       d = d.getIn([gatewayPublicAddress, service]) || Immutable.Map({});

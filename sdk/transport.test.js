@@ -120,6 +120,13 @@ describe('Transport', () => {
       const transport = new Transport(_mockTransport);
       assert.deepEqual(transport.getData('users', '1.0.0', 'get'), d[''].users['1.0.0'].get);
     });
+
+    it('should return empty array if no data', () => {
+      const d = {'': ''};
+      const _mockTransport = _.merge({[m.data]: d}, mockTransport);
+      const transport = new Transport(_mockTransport);
+      assert.deepEqual(transport.getData('users', '1.0.0', 'get'), []);
+    });
   });
 
   describe('getRelations()', () => {
