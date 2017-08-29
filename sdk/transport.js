@@ -46,6 +46,14 @@ class Transport {
   _getAsObject() {
     return this[_data].toJS();
   }
+  /**
+   *
+   * @return {Object}
+   * @protected
+   */
+  _getAsReadOnlyCopy() {
+    return Object.freeze(new Transport(this._getAsObject()));
+  }
 
   /**
    *
