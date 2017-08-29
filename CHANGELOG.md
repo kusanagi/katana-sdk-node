@@ -7,6 +7,18 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ## [1.1.7] - 2017-08-18
 ## Fixed
+- Fixed transport.getData() to return empty array on empty data
+- Fixed ActionSchema.getFiles()
+
+## Added
+- Added request.getId() and getTimestamp()
+- More unit tests
+- Added getHeadersArray() and getHeaderArray()
+- Added better control to private object and method access
+- Added Transport freezing to avoid KATANA unhandled failures
+
+## [1.1.7] - 2017-08-18
+## Fixed
 - Added request.done() handler to child responses to avoid async issues
 
 ## [1.1.6] - 2017-08-03
