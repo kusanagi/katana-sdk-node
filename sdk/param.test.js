@@ -36,6 +36,11 @@ describe('Param', () => {
       const param = new Param('test', 10.0, Param.types.FLOAT);
       expect(param.getValue()).to.equal(10.0);
     });
+
+    it('should return the casted object value of the parameter', () => {
+      const param = new Param('test', {test: 'ok'}, Param.types.OBJECT);
+      expect(param.getValue()).to.deep.equal({test: 'ok'});
+    });
   });
 
   describe('getType()', () => {

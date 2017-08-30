@@ -65,6 +65,8 @@ class Param {
       return Number.parseInt(this._value, 10);
     } else if (this._type === FLOAT) {
       return Number.parseFloat(this._value);
+    } else if (this._type === OBJECT) {
+      return this._value;
     } else {
       try {
         return JSON.parse(this._value);
