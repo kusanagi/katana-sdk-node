@@ -50,7 +50,7 @@ class Action extends Api {
    * @return {Transport}
    */
   getTransport() {
-    return this._transport._asReadOnly();
+    return this._transport._getAsReadOnlyCopy();
   }
 
   /**
