@@ -85,7 +85,7 @@ class Response extends Api {
    * @returns {Transport}
    */
   getTransport() {
-    return Object.freeze(this._transport);
+    return this._transport._getAsReadOnlyCopy();
   }
 
   /**
