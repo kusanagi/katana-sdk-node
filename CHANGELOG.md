@@ -5,6 +5,10 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
+## [1.1.10] - 2017-08-30
+## Added
+- Support for Param type object
+
 ## [1.1.9] - 2017-08-30
 ## Fixed
 - Fix #30 
