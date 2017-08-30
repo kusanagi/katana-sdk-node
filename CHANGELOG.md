@@ -5,7 +5,12 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
-## [1.1.7] - 2017-08-18
+## [1.1.9] - 2017-08-30
+## Fixed
+- Fix #30 
+- Fixed action/response.getTransport() to return copied freezed objects
+
+## [1.1.8] - 2017-08-28
 ## Fixed
 - Fixed transport.getData() to return empty array on empty data
 - Fixed ActionSchema.getFiles()
