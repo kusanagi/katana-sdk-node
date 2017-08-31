@@ -249,7 +249,7 @@ Documentation
 
 See the [API](https://app.kusanagi.io#katana/docs/sdk) for a technical reference of the SDK.
 
-For help using the framework see the [documentation](https://app.kusanagi.io#katana/docs), or join the [community](https://app.kusanagi.io#katana/community).
+For help using the framework see the [documentation](https://app.kusanagi.io#katana/docs).
 
 Support
 -------
@@ -270,7 +270,7 @@ Contributing
 
 If you'd like to know how you can help and support our Open Source efforts see the many ways to [get involved](https://app.kusanagi.io#katana/open-source).
 
-Please also be sure to review our [community guidelines](https://app.kusanagi.io#katana/community/conduct).
+Please also be sure to review our [community guidelines](https://app.kusanagi.io#katana/open-source/conduct).
 
 License
 -------
