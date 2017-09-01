@@ -4,7 +4,6 @@
   "description": "KATANA SDK for Node.js v6",
   "main": "index.js",
   "scripts": {
-    "publish": "np",
     "test": "npm-run-all --serial coverage lint",
     "test:unit": "mocha sdk/**/*.test.js",
     "test:dev": "mocha --watch sdk/**/*.test.js",

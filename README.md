@@ -2,7 +2,7 @@ KATANA SDK for Node.js
 =========================
 
 [![version](https://img.shields.io/npm/v/katana.sdk.svg)](https://npm.im/katana.sdk)
-[![Build Status](https://img.shields.io/travis/kusanagi/katana-sdk-node.svg)](https://travis-ci.com/kusanagi/katana-sdk-node)
+[![Build Status](https://img.shields.io/travis/kusanagi/katana-sdk-node.svg)](https://travis-ci.org/kusanagi/katana-sdk-node)
 [![Coveralls Coverage Status](https://img.shields.io/coveralls/kusanagi/katana-sdk-node.svg)](https://coveralls.io/github/kusanagi/katana-sdk-node?branch=coverage)
 [![license](https://img.shields.io/npm/l/katana.sdk.svg)](https://npm.im/katana.sdk)
 
