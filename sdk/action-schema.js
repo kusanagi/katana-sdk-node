@@ -90,7 +90,7 @@ class ActionSchema extends Schema {
       ParamSchema.fromMapping(paramName, paramsObject[paramName])
     );
 
-    const filesObject = this.readProperty(mapping, m.files, {});
+    const filesObject = this.readProperty(mapping, m.files, {}) || {};
     const filesArray  = Object.keys(filesObject).map((fileName) =>
       FileSchema.fromMapping(fileName, filesObject[fileName])
     );
