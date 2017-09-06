@@ -180,7 +180,6 @@ class HttpResponse {
     if (!this[_data].has('headers')) {
       return {};
     }
-    console.log(this[_data].get('headers'));
     const headers = this[_data].get('headers').toJS();
     let headersObject = {};
     Object.keys(headers).map((key) => {
