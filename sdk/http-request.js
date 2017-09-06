@@ -279,6 +279,7 @@ class HttpRequest {
 
   /**
    *
+   * return {array}
    */
   getHeaderArray(name, defaultValue = []) {
     if (_.isNil(name)) {

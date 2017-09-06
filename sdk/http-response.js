@@ -156,10 +156,20 @@ class HttpResponse {
   }
 
   /**
-   * @return {string[]}
-    */
-  getHeaderArray() {
-    throw new Error('Not implemented');
+   *
+   * @return {array}
+   */
+  getHeaderArray(name, defaultValue = []) {
+    if (_.isNil(name)) {
+      throw new Error('Specify a header `name`');
+    } else if (!_.isString(name)) {
+      throw new TypeError('The header `name` must be a string');
+    }
+
+    return this[_data].getIn(['headers', name]) ?
+      this[_data].getIn(['headers', name])
+      :
+      defaultValue;
   }
 
   /**
@@ -167,14 +177,24 @@ class HttpResponse {
    * @return {Object}
    */
   getHeaders() {
-    return this[_data].has('headers') ? this[_data].get('headers').toJS() : {};
+    if (!this[_data].has('headers')) {
+      return {};
+    }
+    console.log(this[_data].get('headers'));
+    const headers = this[_data].get('headers').toJS();
+    let headersObject = {};
+    Object.keys(headers).map((key) => {
+      headersObject[key] = this[_data].getIn(['headers', key]).get(0);
+    });
+    return headersObject;
   }
 
   /**
-   * @return {Object[]}
+   *
+   * @return {array}
    */
   getHeadersArray() {
-    throw new Error('Not implemented');
+    return this[_data].has('headers') ? this[_data].get('headers').toJS() : [];
   }
 
   /**
@@ -196,7 +216,15 @@ class HttpResponse {
       throw new TypeError('The header `value` must be a string');
     }
 
-    this[_data] = this[_data].setIn(['headers', name], value);
+    let header = this[_data].getIn(['headers', name]);
+
+    if (header === undefined) {
+      header = [];
+    }
+
+    header.push(value);
+
+    this[_data] = this[_data].setIn(['headers', name], header);
 
     return this;
   }
