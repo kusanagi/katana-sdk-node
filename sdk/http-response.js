@@ -223,7 +223,6 @@ class HttpResponse {
     }
 
     let header = this[_data].getIn(['headers', name]);
-    console.log(header);
 
     if (header === undefined) {
       this[_data] = this[_data].setIn(['headers', name], [value]);
