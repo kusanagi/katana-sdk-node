@@ -194,10 +194,10 @@ describe('HttpResponse', () => {
 
   describe('getHeaders()', () => {
     it('should return all headers', () => {
-      const headers = {'Content-Type': 'test'};
+      const headers = {'Content-Type': ['test']};
       const _mockResponse = Object.assign({headers}, mockResponse);
       const httpResponse = new HttpResponse(_mockResponse);
-      assert.deepEqual(httpResponse.getHeaders(), headers);
+      assert.deepEqual(httpResponse.getHeaders(), {'Content-Type': 'test'});
     });
 
     it('should return an empty set of headers when none are set', () => {
@@ -235,6 +235,13 @@ describe('HttpResponse', () => {
       const httpResponse = new HttpResponse(mockResponse);
       assert.throws(() => httpResponse.setHeader('Content-Type', []),
         /The header `value` must be a string/);
+    });
+
+    it('should register a new header as an array with 1 value', () => {
+      const httpResponse = new HttpResponse(mockResponse);
+      httpResponse.setHeader('X-Test', 'test');
+      assert.ok(httpResponse.hasHeader('X-Test'));
+      assert.deepEqual(httpResponse.getHeaderArray('X-Test'), ['test']);
     });
   });
 
