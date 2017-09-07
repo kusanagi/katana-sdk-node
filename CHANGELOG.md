@@ -5,6 +5,13 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
+## [1.2.2] - 2017-09-07
+## Fixed
+- Fix error in response.setHeader adding wrong type of value
+
+## Added
+- getHeaderArray and getHeadersArray on httpResponse
+
 ## [1.2.1] - 2017-09-06
 ## Fixed
 - Fix error in actionschema object.keys
