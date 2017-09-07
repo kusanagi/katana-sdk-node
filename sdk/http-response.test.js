@@ -166,7 +166,7 @@ describe('HttpResponse', () => {
 
   describe('getHeader()', () => {
     it('should return the header with the specified `name`', () => {
-      const _mockResponse = Object.assign({headers: {'Content-Type': 'test'}}, mockResponse);
+      const _mockResponse = Object.assign({headers: {'Content-Type': ['test']}}, mockResponse);
       const httpResponse = new HttpResponse(_mockResponse);
       assert.equal(httpResponse.getHeader('Content-Type'), 'test');
     });

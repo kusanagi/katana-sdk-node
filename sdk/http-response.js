@@ -181,9 +181,16 @@ class HttpResponse {
       return {};
     }
     const headers = this[_data].get('headers').toJS();
+    if (headers === undefined) {
+      return {};
+    }
     let headersObject = {};
     Object.keys(headers).map((key) => {
-      headersObject[key] = this[_data].getIn(['headers', key]).get(0);
+      let value = this[_data].getIn(['headers', key]);
+      if (Immutable.List.isList(value)) {
+        value = value.get(0);
+      }
+      headersObject[key] = value;
     });
     return headersObject;
   }
@@ -218,12 +225,13 @@ class HttpResponse {
     let header = this[_data].getIn(['headers', name]);
 
     if (header === undefined) {
-      header = [];
+      this[_data] = this[_data].setIn(['headers', name], [value]);
+      return this;
     }
 
     header.push(value);
 
-    this[_data] = this[_data].setIn(['headers', name], header);
+    this[_data] = this[_data].setIn(['headers', name], [header]);
 
     return this;
   }
