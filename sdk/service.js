@@ -20,6 +20,8 @@ class Service extends Component {
    */
   action(name, callback) {
     this._setCallback(name, callback);
+
+    return this;
   }
 
   /**
