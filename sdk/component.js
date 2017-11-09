@@ -176,16 +176,15 @@ class Component {
    * @protected
    */
   _replyWith(metadata, payload) {
-    if (this.socket) {
-      this.busy = true;
-      // To check out the output payload, it's better to use katana service/middleware start --transport
-      // You might need to inspect this if the payload is malformed, though
-      logger.debug('Sending command reply', metadata, JSON.stringify(payload));
-      this.socket.send([metadata, msgpack.pack(payload)]);
-      this.busy = false;
-    } else {
-      logger.debug('No connection to socket');
+    if (!this.socket) {
+      return logger.debug('No connection to socket');
     }
+    this.busy = true;
+    // To check out the output payload, it's better to use katana service/middleware start --transport
+    // You might need to inspect this if the payload is malformed, though
+    logger.debug('Sending command reply', metadata, JSON.stringify(payload));
+    this.socket.send([metadata, msgpack.pack(payload)]);
+    this.busy = false;
   }
 
   /**
