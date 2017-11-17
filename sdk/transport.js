@@ -372,7 +372,13 @@ class Transport {
     const gatewayPublicAddress = this._getGatewayPublicAddress();
     const path = [m.data, gatewayPublicAddress, service, version, action];
 
-    this[_data] = this[_data].setIn(path, Immutable.fromJS(source));
+    if (!this[_data].hasIn(path)) {
+      this[_data] = this[_data].setIn(path, Immutable.fromJS([]));
+    }
+
+    this[_data] = this[_data].updateIn(path, function(list) {
+      return list.push(Immutable.fromJS(source));
+    });
   }
 
   /**
