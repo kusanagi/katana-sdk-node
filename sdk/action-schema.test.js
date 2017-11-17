@@ -236,6 +236,187 @@ describe('ActionSchema', () => {
 
   });
 
+  describe('hasTag()', () => {
+    const mockActionMapping = {
+      'D': false,
+      'c': true,
+      'f': {},
+      'E': {
+        'V': true,
+        'f': [
+          {
+            'n': 'id',
+            't': 'integer'
+          },
+          {
+            'n': 'name',
+            't': 'string'
+          },
+          {
+            'n': 'color',
+            't': 'string'
+          },
+          {
+            'n': 'nick',
+            't': 'string'
+          },
+          {
+            'n': 'weapon',
+            't': 'string'
+          }
+        ]
+      },
+      't': ['tag1'],
+      'k': 'id',
+      'x': 1,
+      'h': {
+        'g': true,
+        'i': 'query',
+        'p': '/1.0/users'
+      },
+      'p': {
+        'users': {
+          'r': false,
+          'n': 'users',
+          't': 'string',
+          'h': {
+            'g': true,
+            'i': 'query',
+            'p': 'users'
+          }
+        }
+      }
+    };
+
+    it('returns true when a given tag is present', () => {
+
+      const actionSchema = ActionSchema.fromMapping('list', mockActionMapping);
+      expect(actionSchema.hasTag('tag1')).to.equal(true);
+    });
+
+    it('returns false when a given tag is not present', () => {
+      const actionSchema = ActionSchema.fromMapping('list', mockActionMapping);
+      expect(actionSchema.hasTag('tag2')).to.equal(false);
+    });
+
+  });
+
+  describe('getTags()', () => {
+
+    it('returns an empty array when no tags were in the transport', () => {
+      const mockActionMapping = {
+        'D': false,
+        'c': true,
+        'f': {},
+        'E': {
+          'V': true,
+          'f': [
+            {
+              'n': 'id',
+              't': 'integer'
+            },
+            {
+              'n': 'name',
+              't': 'string'
+            },
+            {
+              'n': 'color',
+              't': 'string'
+            },
+            {
+              'n': 'nick',
+              't': 'string'
+            },
+            {
+              'n': 'weapon',
+              't': 'string'
+            }
+          ]
+        },
+        // 't': ['tag1'], // intentionally left out
+        'k': 'id',
+        'x': 1,
+        'h': {
+          'g': true,
+          'i': 'query',
+          'p': '/1.0/users'
+        },
+        'p': {
+          'users': {
+            'r': false,
+            'n': 'users',
+            't': 'string',
+            'h': {
+              'g': true,
+              'i': 'query',
+              'p': 'users'
+            }
+          }
+        }
+      };
+
+      const actionSchema = ActionSchema.fromMapping('list', mockActionMapping);
+      expect(actionSchema.getTags()).to.have.same.members([]);
+    });
+
+    it('returns an array of tags when tags were in the transport', () => {
+      const mockActionMapping = {
+        'D': false,
+        'c': true,
+        'f': {},
+        'E': {
+          'V': true,
+          'f': [
+            {
+              'n': 'id',
+              't': 'integer'
+            },
+            {
+              'n': 'name',
+              't': 'string'
+            },
+            {
+              'n': 'color',
+              't': 'string'
+            },
+            {
+              'n': 'nick',
+              't': 'string'
+            },
+            {
+              'n': 'weapon',
+              't': 'string'
+            }
+          ]
+        },
+        't': ['tag1', 'tag2'],
+        'k': 'id',
+        'x': 1,
+        'h': {
+          'g': true,
+          'i': 'query',
+          'p': '/1.0/users'
+        },
+        'p': {
+          'users': {
+            'r': false,
+            'n': 'users',
+            't': 'string',
+            'h': {
+              'g': true,
+              'i': 'query',
+              'p': 'users'
+            }
+          }
+        }
+      };
+
+      const actionSchema = ActionSchema.fromMapping('list', mockActionMapping);
+      expect(actionSchema.getTags()).to.have.same.members(['tag1', 'tag2']);
+    });
+
+  });
+
   describe('getHttpSchema()', () => {
 
     it('return an instance of the HttpActionSchema', () => {
