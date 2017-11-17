@@ -115,7 +115,24 @@ describe('Api', () => {
     });
   });
 
+  describe('hastVariable()', () => {
+    it('should expose a hastVariable method', () => {
+      const api = new Api(null, null, null, null, {});
+      assert.ok(typeof api.hasVariable === 'function');
+    });
 
+    it('should return true for a defined variable', () => {
+      const variables = {var: 'test'};
+      const api = new Api(null, null, null, null, null, variables);
+      assert.equal(api.hasVariable('var'), true);
+    });
+
+    it('should return false for an undefined variable', () => {
+      const variables = {var: 'test'};
+      const api = new Api(null, null, null, null, variables);
+      assert.equal(api.hasVariable('foo'), false);
+    });
+  });
 
   describe('hasResource()', () => {
 
