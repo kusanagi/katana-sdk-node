@@ -108,6 +108,20 @@ describe('Action', () => {
       expect(param.getValue()).to.equal('James');
     });
 
+    it('should get a new empty parameter when requesting a param that does not exist', () => {
+      const mockParams = {
+          name: {
+            [m.value]: 'James',
+            [m.type]: 'string'
+          }
+      };
+      const action = new Action(null, null, 'users', '1.0', null, {}, false, '', mockParams, {});
+      const param = action.getParam('age');
+      expect(param).to.be.an.instanceOf(Param);
+      expect(param.getValue()).to.equal('');
+      expect(param.exists()).to.equal(false);
+    });
+
     it('should throw an error if the param `name` is not specified', () => {
       const action = new Action(null, 'users', '1.0', null, {}, false, '', {params: {}}, {});
       expect(() => action.getParam(null)).to.throw(/Specify a param `name`/);
