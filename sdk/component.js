@@ -176,6 +176,9 @@ class Component {
    * @protected
    */
   _replyWith(metadata, payload) {
+    if (!this.socket) {
+      return logger.debug('No connection to socket');
+    }
     this.busy = true;
     // To check out the output payload, it's better to use katana service/middleware start --transport
     // You might need to inspect this if the payload is malformed, though
@@ -202,17 +205,6 @@ class Component {
 
     this._processCommand(actionName, payload);
   }
-
-  // /**
-  //  *
-  //  * @param {string} actionName
-  //  * @param {Object} payload
-  //  * @private
-  //  */
-  // _processCommand(actionName, payload) {
-  //   logger.error('Unhandled call', actionName, JSON.stringify(payload));
-  //   throw new Error('Must be implemented in child class');
-  // }
 
   /**
    *
