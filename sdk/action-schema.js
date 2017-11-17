@@ -1,6 +1,6 @@
 'use strict';
 
-/*eslint max-params: ["error", 13]*/
+/*eslint max-params: ["error", 14]*/
 
 const m                       = require('./mappings');
 const Schema                  = require('./schema');
@@ -29,6 +29,7 @@ class ActionSchema extends Schema {
    * @param {Object} files
    * @param {ActionRelationSchema[]} relations
    * @param {Object[]} calls
+   * @param {string[]} tags
    * @param {Object[]} deferredCalls
    * @param {Object[]} remoteCalls
    * @param {ReturnValueSchema} returnValueSchema
@@ -38,6 +39,7 @@ class ActionSchema extends Schema {
               actionEntity, transportFallbackSchema, httpActionSchema,
               deprecated,
               params  = {}, files = {}, relations = [],
+              tags = [],
               calls = [], deferredCalls = [], remoteCalls = [],
               returnValueSchema = null
   ) {
@@ -55,6 +57,8 @@ class ActionSchema extends Schema {
     this._params    = params;
     this._files     = files;
     this._relations = relations;
+
+    this._tags = tags;
 
     this._calls         = calls;
     this._deferredCalls = deferredCalls;
@@ -107,6 +111,8 @@ class ActionSchema extends Schema {
       paramsArray,
       filesArray,
       this.readProperty(mapping, m.relations, []).map(ActionRelationSchema.parseMapping),
+
+      this.readProperty(mapping, m.tags, []),
 
       this.readProperty(mapping, m.calls, false),
       this.readProperty(mapping, m.deferred_calls, false),
@@ -428,6 +434,23 @@ class ActionSchema extends Schema {
     }
 
     return this._files[name];
+  }
+
+  /**
+   *
+   * @param {string} name
+   * @returns {boolean}
+   */
+  hasTag(name) {
+    return this._tags.includes(name);
+  }
+
+  /**
+   *
+   * @returns {string[]}
+   */
+  getTags() {
+    return this._tags;
   }
 
   /**

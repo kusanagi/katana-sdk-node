@@ -94,6 +94,7 @@ const Mappings = {
   'status': 's',
   'start_time': 's',
   'timeout': 'x',
+  'tags': 't',
   'token': 't',
   'transactions': 't',
   'transport': 'T',
