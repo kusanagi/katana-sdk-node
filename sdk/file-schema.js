@@ -41,7 +41,8 @@ class FileSchema extends Schema {
    * @param {Object} mapping
    * @returns {FileSchema}
    */
-  static fromMapping(name, mapping) {
+  static fromMapping(mapping) {
+    const name         = this.readProperty(mapping, m.name, false);
     const mime         = this.readProperty(mapping, m.mime, 'text/plain');
     const required     = this.readProperty(mapping, m.required, false);
     const max          = this.readProperty(mapping, m.maximum, Number.MAX_VALUE);

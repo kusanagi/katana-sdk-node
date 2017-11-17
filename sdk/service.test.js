@@ -71,7 +71,7 @@ describe('Service', function () {
               'k': 'id',
               'D': false,
               'c': false,
-              'f': {},
+              'f': [],
               'x': 1,
               'E': {
                 'f': [{'t': 'integer', 'n': 'id'}, {'t': 'string', 'n': 'name'}, {
@@ -93,7 +93,7 @@ describe('Service', function () {
               'k': 'id',
               'D': false,
               'c': true,
-              'f': {},
+              'f': [],
               'x': 1,
               'E': {
                 'f': [{'t': 'integer', 'n': 'id'}, {'t': 'string', 'n': 'name'}, {

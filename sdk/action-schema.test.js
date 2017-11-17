@@ -240,7 +240,7 @@ describe('ActionSchema', () => {
     const mockActionMapping = {
       'D': false,
       'c': true,
-      'f': {},
+      'f': [],
       'E': {
         'V': true,
         'f': [
@@ -307,7 +307,7 @@ describe('ActionSchema', () => {
       const mockActionMapping = {
         'D': false,
         'c': true,
-        'f': {},
+        'f': [],
         'E': {
           'V': true,
           'f': [
@@ -363,7 +363,7 @@ describe('ActionSchema', () => {
       const mockActionMapping = {
         'D': false,
         'c': true,
-        'f': {},
+        'f': [],
         'E': {
           'V': true,
           'f': [
@@ -423,7 +423,7 @@ describe('ActionSchema', () => {
       const mockActionMapping = {
         'D': false,
         'c': true,
-        'f': {},
+        'f': [],
         'E': {
           'V': true,
           'f': [

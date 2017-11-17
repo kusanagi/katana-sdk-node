@@ -22,7 +22,7 @@ const mockServiceMapping = {
         [m.path]: '/1.0/users/{id}',
         [m.input]: 'query'
       },
-      [m.files]: {},
+      [m.files]: [],
       [m.timeout]: 1,
       [m.collection]: false,
       [m.primary_key]: 'id',
