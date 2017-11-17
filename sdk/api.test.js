@@ -184,7 +184,7 @@ describe('Api', () => {
             'list': {
               'D': false,
               'c': true,
-              'f': {},
+              'f': [],
               'E': {
                 'V': true,
                 'f': [{'n': 'id', 't': 'integer'}, {'n': 'name', 't': 'string'}, {
@@ -207,7 +207,7 @@ describe('Api', () => {
             'read': {
               'D': false,
               'c': false,
-              'f': {},
+              'f': [],
               'E': {
                 'V': true,
                 'f': [{'n': 'id', 't': 'integer'}, {'n': 'name', 't': 'string'}, {
@@ -253,7 +253,7 @@ describe('Api', () => {
             'list': {
               'D': false,
               'c': true,
-              'f': {},
+              'f': [],
               'E': {
                 'V': true,
                 'f': [{'n': 'id', 't': 'integer'}, {'n': 'name', 't': 'string'}, {
@@ -276,7 +276,7 @@ describe('Api', () => {
             'read': {
               'D': false,
               'c': false,
-              'f': {},
+              'f': [],
               'E': {
                 'V': true,
                 'f': [{'n': 'id', 't': 'integer'}, {'n': 'name', 't': 'string'}, {
