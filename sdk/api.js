@@ -139,6 +139,16 @@ class Api {
     return this._variables[name] || null;
   }
 
+  /**
+   * Determines if a variable as been defined with the given name
+   *
+   * @param {string} name Name of the variable
+   * @return {string}
+   */
+  hasVariable(name) {
+    return !!this._variables[name];
+  }
+
   hasResource(name) {
     return this._component.hasResource(name);
   }
