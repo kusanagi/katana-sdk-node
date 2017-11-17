@@ -712,6 +712,11 @@ for action: "${this._actionName}"`
     if (param instanceof Param) {
       return param;
     }
+
+    if (!param) {
+      return new Param(name, '', 'string', false);
+    }
+
     return new Param(name, param[m.value], param[m.type], this.hasParam(name));
   }
 
