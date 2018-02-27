@@ -4,6 +4,7 @@ const assert = require('assert');
 const _ = require('lodash');
 const Transport = require('./transport');
 const File = require('./file');
+const expect = require('chai').expect;
 
 const m = require('./mappings');
 
@@ -147,17 +148,33 @@ describe('Transport', () => {
 
   describe('getLinks()', () => {
     it('should return all links', () => {
-      const links = {};
-      const _mockTransport = _.merge({links}, mockTransport);
-      const transport = new Transport(_mockTransport);
-      assert.deepEqual(transport.getLinks(), links);
-    });
+      const links = {
+        address: {
+            name: {
+                link1: 'http://example.com/1',
+                link2: 'http://example.com/2'
+            }
+        }
+      };
+      const expectedResult = [
+          {
+                ['_address']: 'address',
+                ['_name']: 'name',
+                ['_link']: 'link1',
+                ['_uri']: 'http://example.com/1',
+          },
+          {
+                ['_address']: 'address',
+                ['_name']: 'name',
+                ['_link']: 'link2',
+                ['_uri']: 'http://example.com/2',
+          }
+      ];
 
-    it('should return links specified by `service`', () => {
-      const links = {users: {}};
       const _mockTransport = _.merge({links}, mockTransport);
       const transport = new Transport(_mockTransport);
-      assert.deepEqual(transport.getLinks('users'), links.users);
+      console.log(transport);
+      expect(transport.getLinks()).to.eql(expectedResult);
     });
   });
 

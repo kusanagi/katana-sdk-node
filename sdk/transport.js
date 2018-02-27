@@ -3,6 +3,7 @@
 const Immutable = require('immutable');
 const _ = require('lodash');
 const File = require('./file');
+const Link = require('./link');
 
 const m = require('./mappings');
 
@@ -225,17 +226,26 @@ class Transport {
 
   /**
    *
-   * @param {string} service
-   * @return {Object}
+   * @return {Link[]}
    */
-  getLinks(service) {
+  getLinks() {
     let links = this[_data].get('links') || Immutable.Map({});
+    let linkObjects = [];
 
-    if (service) {
-      links = links.get(service) || Immutable.Map({});
-    }
+    links.keySeq().forEach(
+        (address) => links.get(address).keySeq().forEach(
+            (name) => links.getIn([address, name]).keySeq().forEach(
+                (link) => linkObjects.push(new Link(
+                    address,
+                    name,
+                    link,
+                    links.getIn([address, name, link])
+                ))
+            )
+        )
+    );
 
-    return links.toJS();
+    return linkObjects;
   }
 
   /**
