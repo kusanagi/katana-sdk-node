@@ -3,6 +3,8 @@
 const Immutable = require('immutable');
 const _ = require('lodash');
 const File = require('./file');
+const ServiceData = require('./service-data');
+const ActionData = require('./action-data');
 const Link = require('./link');
 
 const m = require('./mappings');
@@ -167,32 +169,37 @@ class Transport {
 
   /**
    *
-   * @param {string} service
-   * @param {string} version
-   * @param {string} action
    * @return {Object}
    */
-  getData(service, version, action) {
-    let d = this[_data].get(m.data);
+  getData() {
+      let data = this[_data].get(m.data);
+      let dataObjects = [];
+      let actions = [];
 
-    if (!d) {
-      return [];
-    }
-
-    if (service) {
-      const gatewayPublicAddress = this._getGatewayPublicAddress();
-      d = d.getIn([gatewayPublicAddress, service]) || Immutable.Map({});
-
-      if (version) {
-        d = d.get(version) || Immutable.Map({});
-
-        if (action) {
-          d = d.get(action) || Immutable.Map({});
-        }
+      if (!data) {
+          return [];
       }
-    }
 
-    return d.toJS();
+      data.keySeq().forEach(
+          (address) => data.get(address).keySeq().forEach(
+              (name) => data.getIn([address, name]).keySeq().forEach(
+                  function (version) {
+                      actions = [];
+                      data.getIn([address, name, version]).keySeq().forEach(
+                          (action) => data.getIn([address, name, version, action]).keySeq().forEach(
+                              (i) => actions.push(new ActionData(
+                                  action,
+                                  data.getIn([address, name, version, action, i]).toJS()
+                              ))
+                          )
+                      );
+                      dataObjects.push(new ServiceData(address, name, version, actions));
+                  }
+              )
+          )
+      );
+
+      return dataObjects;
   }
 
   /**

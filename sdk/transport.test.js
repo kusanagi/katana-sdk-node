@@ -95,38 +95,52 @@ describe('Transport', () => {
 
   describe('getData()', () => {
     it('should return all the data stored in the transport', () => {
-      const d = {'': {users: {'1.0.0': {'get': [{foo: 'bar'}]}}}};
-      const _mockTransport = _.merge({[m.data]: d}, mockTransport);
-      const transport = new Transport(_mockTransport);
-      assert.deepEqual(transport.getData(), d);
-    });
+      const d = {
+        'address': {
+          users: {
+            '1.0.0': {
+              'get': [
+                {foo: 'bar'},
+                [
+                    {foo: 'bar'},
+                    {foo: 'biz'}
+                ]
+              ]
+            }
+          }
+        }
+      };
+      const expectedResult = [
+          {
+              ['_address']: 'address',
+              ['_name']: 'users',
+              ['_version']: '1.0.0',
+              ['_actions']: [
+                {
+                  ['_name']: 'get',
+                  ['_collection']: false,
+                  ['_data']: {foo: 'bar'}
+                },
+                {
+                  ['_name']: 'get',
+                  ['_collection']: true,
+                  ['_data']: [
+                      {foo: 'bar'},
+                      {foo: 'biz'}
+                  ]
+                }
+              ],
+          }
+      ];
 
-    it('should return data specified by `service`', () => {
-      const d = {'': {users: {'1.0.0': {'get': {}}}}};
       const _mockTransport = _.merge({[m.data]: d}, mockTransport);
       const transport = new Transport(_mockTransport);
-      assert.deepEqual(transport.getData('users'), d[''].users);
-    });
-
-    it('should return data specified by `service` and `version`', () => {
-      const d = {'': {users: {'1.0.0': {'get': {}}}}};
-      const _mockTransport = _.merge({[m.data]: d}, mockTransport);
-      const transport = new Transport(_mockTransport);
-      assert.deepEqual(transport.getData('users', '1.0.0'), d[''].users['1.0.0']);
-    });
-
-    it('should return data specified by `service` and `version` and `action`', () => {
-      const d = {'': {users: {'1.0.0': {'get': {}}}}};
-      const _mockTransport = _.merge({[m.data]: d}, mockTransport);
-      const transport = new Transport(_mockTransport);
-      assert.deepEqual(transport.getData('users', '1.0.0', 'get'), d[''].users['1.0.0'].get);
+      expect(transport.getData()).to.eql(expectedResult);
     });
 
     it('should return empty array if no data', () => {
-      const d = {'': ''};
-      const _mockTransport = _.merge({[m.data]: d}, mockTransport);
-      const transport = new Transport(_mockTransport);
-      assert.deepEqual(transport.getData('users', '1.0.0', 'get'), []);
+      const transport = new Transport(mockTransport);
+      assert.deepEqual(transport.getData(), []);
     });
   });
 
@@ -173,7 +187,6 @@ describe('Transport', () => {
 
       const _mockTransport = _.merge({links}, mockTransport);
       const transport = new Transport(_mockTransport);
-      console.log(transport);
       expect(transport.getLinks()).to.eql(expectedResult);
     });
   });
