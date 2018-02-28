@@ -8,6 +8,9 @@ const ActionData = require('./action-data');
 const Relation = require('./relation');
 const ForeignRelation = require('./foreign-relation');
 const Link = require('./link');
+const Caller = require('./caller.js');
+const Callee = require('./callee.js');
+const Param = require('./param.js');
 
 const m = require('./mappings');
 
@@ -297,17 +300,43 @@ class Transport {
 
   /**
    *
-   * @param {string} service
    * @return {Object}
    */
-  getCalls(service) {
+  getCalls() {
     let calls = this[_data].get('calls') || Immutable.Map({});
+    let callObjects = [];
+    let params = [];
+    let callData;
 
-    if (service) {
-      calls = calls.get(service) || Immutable.Map({});
-    }
+    calls.keySeq().forEach((service) => {
+      calls.get(service).keySeq().forEach(function (version) {
+        calls.getIn([service, version]).keySeq().forEach((primaryKey) => {
+          callData = calls.getIn([service, version, primaryKey]);
+          params = callData.get(m.params) || Immutable.List([]);
+          callObjects.push(new Caller(
+            service,
+            version,
+            callData.get(m.caller),
+            new Callee(
+              callData.get(m.timeout),
+              callData.get(m.duration),
+              callData.get(m.gateway),
+              callData.get(m.name),
+              callData.get(m.version),
+              callData.get(m.action),
+              params.map((param) => new Param(
+                param.get(m.name),
+                param.get(m.value),
+                param.get(m.type),
+                true
+              )).toJS()
+            )
+          ));
+        });
+      });
+    });
 
-    return calls.toJS();
+    return callObjects;
   }
 
   /**

@@ -220,17 +220,88 @@ describe('Transport', () => {
 
   describe('getCalls()', () => {
     it('should return all calls', () => {
-      const calls = {};
-      const _mockTransport = _.merge({calls}, mockTransport);
-      const transport = new Transport(_mockTransport);
-      assert.deepEqual(transport.getCalls(), calls);
-    });
 
-    it('should return calls specified by `service`', () => {
-      const calls = {users: {}};
-      const _mockTransport = _.merge({calls}, mockTransport);
-      const transport = new Transport(_mockTransport);
-      assert.deepEqual(transport.getCalls('users'), calls.users);
+        const calls = {
+            users: {
+                '1.0.0': [
+                    {
+                        'D': 1120,
+                        'x': 1500,
+                        'g': 'address',
+                        'n': 'posts',
+                        'v': '1.2.0',
+                        'a': 'list',
+                        'C': 'read',
+                        'p': [
+                            {
+                                'n': 'token',
+                                'v': 'abcd',
+                                't': 'string'
+                            },
+                            {
+                                'n': 'user_id',
+                                'v': 123,
+                                't': 'integer'
+                            }
+                        ]
+                    },
+                    {
+                        'n': 'comments',
+                        'v': '1.2.3',
+                        'a': 'find',
+                        'C': 'read'
+                    },
+                ]
+            }
+        };
+
+        const expectedResult = [
+            {
+                ['_name']: 'users',
+                ['_version']: '1.0.0',
+                ['_action']: 'read',
+                ['_callee']: {
+                    ['_duration']: 1120,
+                    ['_timeout']: 1500,
+                    ['_name']: 'posts',
+                    ['_address']: 'address',
+                    ['_version']: '1.2.0',
+                    ['_action']: 'list',
+                    ['_params']: [
+                        {
+                            ['_name']: 'token',
+                            ['_value']: 'abcd',
+                            ['_type']: 'string',
+                            ['_exists']: true,
+                        },
+                        {
+                            ['_name']: 'user_id',
+                            ['_value']: 123,
+                            ['_type']: 'integer',
+                            ['_exists']: true,
+                        },
+                    ]
+                },
+            },
+            {
+                ['_name']: 'users',
+                ['_version']: '1.0.0',
+                ['_action']: 'read',
+                ['_callee']: {
+                    ['_duration']: undefined,
+                    ['_timeout']: undefined,
+                    ['_address']: undefined,
+                    ['_name']: 'comments',
+                    ['_version']: '1.2.3',
+                    ['_action']: 'find',
+                    ['_params']: [],
+                },
+            }
+        ];
+
+        const _mockTransport = _.merge({calls}, mockTransport);
+        const transport = new Transport(_mockTransport);
+        expect(transport.getCalls()).to.eql(expectedResult);
     });
   });
 

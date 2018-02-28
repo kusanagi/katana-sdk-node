@@ -13,6 +13,7 @@ const Mappings = {
   'base_path': 'b',
   'call': 'c',
   'callee': 'c',
+  'caller': 'C',
   'calls': 'C',
   'client': 'c',
   'deferred_calls': 'dc',
