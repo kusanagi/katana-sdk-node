@@ -369,17 +369,34 @@ describe('Transport', () => {
 
   describe('getErrors()', () => {
     it('should return all errors', () => {
-      const errors = {};
-      const _mockTransport = _.merge({errors}, mockTransport);
-      const transport = new Transport(_mockTransport);
-      assert.deepEqual(transport.getErrors(), errors);
-    });
+        const errors = {
+            'http://127.0.0.1:80': {
+                'users': {
+                    '1.0.0': [
+                        {
+                            'm': 'The user does not exist',
+                            'c': 9,
+                            's': '404 Not Found'
+                        }
+                    ]
+                }
+            }
+        };
+        const _mockTransport = _.merge({errors}, mockTransport);
+        const transport = new Transport(_mockTransport);
 
-    it('should return errors specified by `service`', () => {
-      const errors = {users: {}};
-      const _mockTransport = _.merge({errors}, mockTransport);
-      const transport = new Transport(_mockTransport);
-      assert.deepEqual(transport.getErrors('users'), errors.users);
+        const expectedResult = [
+            {
+                ['_address']: 'http://127.0.0.1:80',
+                ['_name']: 'users',
+                ['_version']: '1.0.0',
+                ['_message']: 'The user does not exist',
+                ['_code']: 9,
+                ['_status']: '404 Not Found',
+            }
+        ];
+
+        expect(transport.getErrors()).to.eql(expectedResult);
     });
   });
 });

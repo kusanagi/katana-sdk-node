@@ -11,6 +11,7 @@ const Link = require('./link');
 const Caller = require('./caller.js');
 const Callee = require('./callee.js');
 const Transaction = require('./transaction.js');
+const TransportError = require('./error.js');
 const Param = require('./param.js');
 
 const m = require('./mappings');
@@ -390,17 +391,31 @@ class Transport {
 
   /**
    *
-   * @param {string} service
    * @return {Object}
    */
-  getErrors(service) {
+  getErrors() {
     let errors = this[_data].get('errors') || Immutable.Map({});
+    let errorObjects = [];
 
-    if (service) {
-      errors = errors.get(service) || Immutable.Map({});
-    }
+    errors.keySeq().forEach(
+      (address) => errors.get(address).keySeq().forEach(
+        (service) => errors.getIn([address, service]).keySeq().forEach(
+          (version) => errors.getIn([address, service, version]).keySeq().forEach(
+            (i) => errorObjects.push(new TransportError(
+                  address,
+                  service,
+                  version,
+                  errors.getIn([address, service, version, i, m.message]),
+                  errors.getIn([address, service, version, i, m.code]),
+                  errors.getIn([address, service, version, i, m.status])
+              )
+            )
+          )
+        )
+      )
+    );
 
-    return errors.toJS();
+    return errorObjects;
   }
 
   /**
