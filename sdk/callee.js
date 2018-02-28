@@ -45,11 +45,11 @@ class Callee {
     return this._duration;
   }
 
-    /**
-     * Returns true if the call is remote
-     *
-     * @returns {boolean}
-     */
+  /**
+   * Returns true if the call is remote
+   *
+   * @returns {boolean}
+   */
   isRemote() {
     return _.isString(this._address) && this._address !== '';
   }

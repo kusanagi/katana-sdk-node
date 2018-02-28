@@ -220,7 +220,6 @@ describe('Transport', () => {
 
   describe('getCalls()', () => {
     it('should return all calls', () => {
-
         const calls = {
             users: {
                 '1.0.0': [
@@ -306,18 +305,65 @@ describe('Transport', () => {
   });
 
   describe('getTransactions()', () => {
-    it('should return all transactions', () => {
-      const transactions = {};
-      const _mockTransport = _.merge({transactions}, mockTransport);
-      const transport = new Transport(_mockTransport);
-      assert.deepEqual(transport.getTransactions(), transactions);
+    const transactions = {
+      'c': [
+          {
+              'n': 'users',
+              'v': '1.0.0',
+              'a': 'save',
+              'C': 'create',
+              'p': [
+                  {
+                      'n': 'user_id',
+                      'v': 123,
+                      't': 'integer'
+                  }
+              ]
+          }
+      ],
+      'r': [
+          {
+              'n': 'users',
+              'v': '1.0.0',
+              'a': 'undo',
+              'C': 'create',
+              'p': [
+                  {
+                      'n': 'user_id',
+                      'v': 123,
+                      't': 'integer'
+                  }
+              ]
+          }
+      ]
+    };
+    const _mockTransport = _.merge({transactions}, mockTransport);
+    const transport = new Transport(_mockTransport);
+
+    it('should return all transactions of the given type', () => {
+        const expectedResult = [
+            {
+                ['_type']: 'commit',
+                ['_name']: 'users',
+                ['_version']: '1.0.0',
+                ['_callerAction']: 'create',
+                ['_calleeAction']: 'save',
+                ['_params']: [
+                    {
+                        ['_name']: 'user_id',
+                        ['_value']: 123,
+                        ['_type']: 'integer',
+                        ['_exists']: true,
+                    },
+                ]
+            }
+        ];
+
+        expect(transport.getTransactions('commit')).to.eql(expectedResult);
     });
 
-    it('should return transactions specified by `service`', () => {
-      const transactions = {users: {}};
-      const _mockTransport = _.merge({transactions}, mockTransport);
-      const transport = new Transport(_mockTransport);
-      assert.deepEqual(transport.getTransactions('users'), transactions.users);
+    it('should not return transactions of other types', () => {
+        expect(transport.getTransactions('complete')).to.eql([]);
     });
   });
 

@@ -9,8 +9,8 @@ describe('ForeignRelation', () => {
     expect(foreignRelation).to.be.an.instanceOf(ForeignRelation);
   });
 
-    const badConstructor = () => new ForeignRelation(null, null, 'foo', null);
-    it('should throw error with invalid types', () => {
+  const badConstructor = () => new ForeignRelation(null, null, 'foo', null);
+  it('should throw error with invalid types', () => {
     expect(badConstructor).to.throw(TypeError);
   });
 

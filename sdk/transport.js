@@ -10,6 +10,7 @@ const ForeignRelation = require('./foreign-relation');
 const Link = require('./link');
 const Caller = require('./caller.js');
 const Callee = require('./callee.js');
+const Transaction = require('./transaction.js');
 const Param = require('./param.js');
 
 const m = require('./mappings');
@@ -348,17 +349,43 @@ class Transport {
 
   /**
    *
-   * @param {string} service
+   * @param {string} type
    * @return {Object}
    */
-  getTransactions(service) {
+  getTransactions(type) {
+    const types = {
+      'c': 'commit',
+      'r': 'rollback',
+      'C': 'complete'
+    };
     let transactions = this[_data].get('transactions') || Immutable.Map({});
+    let transactionObjects = [];
+    let params = [];
+    let transactionData;
 
-    if (service) {
-      transactions = transactions.get(service) || Immutable.Map({});
-    }
+    transactions.keySeq()
+      .filter((transactionType) => types[transactionType] === type)
+      .forEach((transactionType) => {
+        transactions.get(transactionType).keySeq().forEach((i) => {
+          transactionData = transactions.getIn([transactionType, i]);
+          params = transactionData.get(m.params) || Immutable.List([]);
+          transactionObjects.push(new Transaction(
+              types[transactionType],
+              transactionData.get(m.name),
+              transactionData.get(m.version),
+              transactionData.get(m.caller),
+              transactionData.get(m.action),
+              params.map((param) => new Param(
+                  param.get(m.name),
+                  param.get(m.value),
+                  param.get(m.type),
+                  true
+              )).toJS()
+          ));
+      });
+    });
 
-    return transactions.toJS();
+    return transactionObjects;
   }
 
   /**
