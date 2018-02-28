@@ -9,15 +9,18 @@ class ForeignRelation {
    *
    * @param {string} address Address of the service
    * @param {string} name Name of the service
-   * @param {string} version Version of the service
-   * @param {ActionData[]} actions Actions of the service with data
+   * @param {string} type Type of the relation
+   * @param {string[]} foreignKeys Keys to which the relation links to
    */
-  constructor(address, name, version, actions) {
+  constructor(address, name, type, foreignKeys) {
+    if (['one', 'many'].indexOf(type) === -1) {
+        throw new TypeError('Invalid relation type. Valid types are "one" and "many"');
+    }
 
     this._address = address;
     this._name = name;
-    this._version = version;
-    this._actions = actions;
+    this._type = type;
+    this._foreignKeys = foreignKeys;
   }
 
   /**
@@ -39,22 +42,22 @@ class ForeignRelation {
   }
 
   /**
-   * Return the service version
+   * Return the relation type
    *
    * @return {string}
    */
-  getVersion() {
-    return this._version;
+  getType() {
+    return this._type;
   }
 
   /**
-   * Return the service actions with data
+   * Return the relation foreign keys
    *
-   * @returns {ActionData[]}
+   * @returns {string[]}
    */
-  getActions() {
-    return this._actions;
+  getForeignKeys() {
+    return this._foreignKeys;
   }
 }
 
-module.exports = ServiceData;
+module.exports = ForeignRelation;

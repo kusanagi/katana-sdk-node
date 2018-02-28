@@ -5,6 +5,8 @@ const _ = require('lodash');
 const File = require('./file');
 const ServiceData = require('./service-data');
 const ActionData = require('./action-data');
+const Relation = require('./relation');
+const ForeignRelation = require('./foreign-relation');
 const Link = require('./link');
 
 const m = require('./mappings');
@@ -169,7 +171,7 @@ class Transport {
 
   /**
    *
-   * @return {Object}
+   * @return {ServiceData}
    */
   getData() {
       let data = this[_data].get(m.data);
@@ -211,17 +213,48 @@ class Transport {
 
   /**
    *
-   * @param {string} service
-   * @return {Object}
+   * @return {Relation[]}
    */
-  getRelations(service) {
+  getRelations() {
     let relations = this[_data].get('relations') || Immutable.Map({});
+    let relationObjects = [];
+    let foreignRelations = [];
+    let foreignKeys, path = [];
 
-    if (service) {
-      relations = relations.get(service) || Immutable.Map({});
-    }
+    relations.keySeq().forEach(function (addressFrom) {
+      path = [addressFrom];
+      relations.getIn(path).keySeq().forEach(function (serviceFrom) {
+        path = [addressFrom, serviceFrom];
+        relations.getIn(path).keySeq().forEach(function (primaryKey) {
+          foreignRelations = [];
+          path = [addressFrom, serviceFrom, primaryKey];
+          relations.getIn(path).keySeq().forEach(function (addressTo) {
+            path = [addressFrom, serviceFrom, primaryKey, addressTo];
+            relations.getIn(path).keySeq().forEach(function (serviceTo) {
+              path = [addressFrom, serviceFrom, primaryKey, addressTo, serviceTo];
+              foreignKeys = relations.getIn(path);
+              if (foreignKeys.toJS) {
+                  foreignKeys = foreignKeys.toJS();
+              }
+              foreignRelations.push(new ForeignRelation(
+                  addressTo,
+                  serviceTo,
+                  _.isArray(foreignKeys) ? 'many' : 'one',
+                  _.isArray(foreignKeys) ? foreignKeys : [foreignKeys]
+              ));
+            });
+          });
+          relationObjects.push(new Relation(
+              addressFrom,
+              serviceFrom,
+              primaryKey,
+              foreignRelations
+          ));
+        });
+      });
+    });
 
-    return relations.toJS();
+    return relationObjects;
   }
 
   /**

@@ -146,17 +146,44 @@ describe('Transport', () => {
 
   describe('getRelations()', () => {
     it('should return all relations', () => {
-      const relations = {};
-      const _mockTransport = _.merge({relations}, mockTransport);
-      const transport = new Transport(_mockTransport);
-      assert.deepEqual(transport.getRelations(), relations);
-    });
+        const relations = {
+            addressFrom: {
+                serviceFrom: {
+                    primaryKey: {
+                        addressTo: {
+                          serviceToSingle: 'singleKey',
+                          serviceToMulti: ['key1', 'key2']
+                        }
+                    }
+                }
+            }
+        };
 
-    it('should return relations specified by `service`', () => {
-      const relations = {users: {}};
-      const _mockTransport = _.merge({relations}, mockTransport);
-      const transport = new Transport(_mockTransport);
-      assert.deepEqual(transport.getRelations('users'), relations.users);
+        const expectedResult = [
+            {
+                ['_address']: 'addressFrom',
+                ['_name']: 'serviceFrom',
+                ['_primaryKey']: 'primaryKey',
+                ['_foreignRelations']: [
+                    {
+                        ['_address']: 'addressTo',
+                        ['_name']: 'serviceToSingle',
+                        ['_type']: 'one',
+                        ['_foreignKeys']: ['singleKey'],
+                    },
+                    {
+                        ['_address']: 'addressTo',
+                        ['_name']: 'serviceToMulti',
+                        ['_type']: 'many',
+                        ['_foreignKeys']: ['key1', 'key2'],
+                    }
+                ],
+            }
+        ];
+
+        const _mockTransport = _.merge({relations}, mockTransport);
+        const transport = new Transport(_mockTransport);
+        expect(transport.getRelations()).to.eql(expectedResult);
     });
   });
 

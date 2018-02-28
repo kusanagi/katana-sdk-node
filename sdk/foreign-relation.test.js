@@ -1,43 +1,44 @@
 'use strict';
 
 const expect = require('chai').expect;
-const ServiceData  = require('./service-data');
-const ActionData  = require('./action-data');
+const ForeignRelation  = require('./foreign-relation');
 
-describe('ServiceData', () => {
+describe('ForeignRelation', () => {
   it('should create an instance', () => {
-    const serviceData = new ServiceData(null, null, null, null);
-    expect(serviceData).to.be.an.instanceOf(ServiceData);
+    const foreignRelation = new ForeignRelation(null, null, 'one', null);
+    expect(foreignRelation).to.be.an.instanceOf(ForeignRelation);
+  });
+
+    const badConstructor = () => new ForeignRelation(null, null, 'foo', null);
+    it('should throw error with invalid types', () => {
+    expect(badConstructor).to.throw(TypeError);
   });
 
   describe('getAddress()', () => {
     it('should return the address of the service', () => {
-      const serviceData = new ServiceData('test', null, null, null);
-      expect(serviceData.getAddress()).to.equal('test');
+      const foreignRelation = new ForeignRelation('test', null, 'one', null);
+      expect(foreignRelation.getAddress()).to.equal('test');
     });
   });
 
   describe('getName()', () => {
     it('should return the name of the service', () => {
-      const serviceData = new ServiceData(null, 'test', null, null);
-      expect(serviceData.getName()).to.equal('test');
+      const foreignRelation = new ForeignRelation(null, 'test', 'one', null);
+      expect(foreignRelation.getName()).to.equal('test');
     });
   });
 
-  describe('getVersion()', () => {
-    it('should return the version of the service', () => {
-      const serviceData = new ServiceData(null, null, 'test', null);
-      expect(serviceData.getVersion()).to.equal('test');
+  describe('getType()', () => {
+    it('should return the type of the relation', () => {
+      const foreignRelation = new ForeignRelation(null, null, 'one', null);
+      expect(foreignRelation.getType()).to.equal('one');
     });
   });
 
-  describe('getActions()', () => {
-    it('should return the actions of the service with data', () => {
-      const actions = [
-          new ActionData(null, {})
-      ];
-      const serviceData = new ServiceData(null, null, null, actions);
-      expect(serviceData.getActions()).to.equal(actions);
+  describe('getForeignKeys()', () => {
+    it('should return the foreign keys of the relation', () => {
+      const foreignRelation = new ForeignRelation(null, null, 'one', []);
+      expect(foreignRelation.getForeignKeys()).to.eql([]);
     });
   });
 });

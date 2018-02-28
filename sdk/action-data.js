@@ -15,7 +15,7 @@ class ActionData {
   constructor(name, data) {
     if (_.isArray(data)) {
       this._collection = true;
-    } else if(_.isObject(data)) {
+    } else if (_.isObject(data)) {
       this._collection = false;
     } else {
       throw new TypeError('The param `data` must be array or object');
