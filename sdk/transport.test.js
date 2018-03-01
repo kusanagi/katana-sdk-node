@@ -146,7 +146,7 @@ describe('Transport', () => {
 
   describe('getRelations()', () => {
     it('should return all relations', () => {
-        const relations = {
+        const r = {
             addressFrom: {
                 serviceFrom: {
                     primaryKey: {
@@ -181,7 +181,7 @@ describe('Transport', () => {
             }
         ];
 
-        const _mockTransport = _.merge({relations}, mockTransport);
+        const _mockTransport = _.merge({r}, mockTransport);
         const transport = new Transport(_mockTransport);
         expect(transport.getRelations()).to.eql(expectedResult);
     });
@@ -189,7 +189,7 @@ describe('Transport', () => {
 
   describe('getLinks()', () => {
     it('should return all links', () => {
-      const links = {
+      const l = {
         address: {
             name: {
                 link1: 'http://example.com/1',
@@ -212,7 +212,7 @@ describe('Transport', () => {
           }
       ];
 
-      const _mockTransport = _.merge({links}, mockTransport);
+      const _mockTransport = _.merge({l}, mockTransport);
       const transport = new Transport(_mockTransport);
       expect(transport.getLinks()).to.eql(expectedResult);
     });
@@ -220,7 +220,7 @@ describe('Transport', () => {
 
   describe('getCalls()', () => {
     it('should return all calls', () => {
-        const calls = {
+        const C = {
             users: {
                 '1.0.0': [
                     {
@@ -298,14 +298,14 @@ describe('Transport', () => {
             }
         ];
 
-        const _mockTransport = _.merge({calls}, mockTransport);
+        const _mockTransport = _.merge({C}, mockTransport);
         const transport = new Transport(_mockTransport);
         expect(transport.getCalls()).to.eql(expectedResult);
     });
   });
 
   describe('getTransactions()', () => {
-    const transactions = {
+    const t = {
       'c': [
           {
               'n': 'users',
@@ -337,7 +337,7 @@ describe('Transport', () => {
           }
       ]
     };
-    const _mockTransport = _.merge({transactions}, mockTransport);
+    const _mockTransport = _.merge({t}, mockTransport);
     const transport = new Transport(_mockTransport);
 
     it('should return all transactions of the given type', () => {
@@ -369,7 +369,7 @@ describe('Transport', () => {
 
   describe('getErrors()', () => {
     it('should return all errors', () => {
-        const errors = {
+        const e = {
             'http://127.0.0.1:80': {
                 'users': {
                     '1.0.0': [
@@ -382,7 +382,7 @@ describe('Transport', () => {
                 }
             }
         };
-        const _mockTransport = _.merge({errors}, mockTransport);
+        const _mockTransport = _.merge({e}, mockTransport);
         const transport = new Transport(_mockTransport);
 
         const expectedResult = [

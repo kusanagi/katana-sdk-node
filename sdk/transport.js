@@ -176,6 +176,20 @@ class Transport {
 
   /**
    *
+   * @return {Object}
+   */
+  _getRawData() {
+      let d = this[_data].get(m.data);
+
+      if (!d) {
+          return [];
+      }
+
+      return d.toJS();
+  }
+
+  /**
+   *
    * @return {ServiceData}
    */
   getData() {
@@ -218,10 +232,20 @@ class Transport {
 
   /**
    *
+   * @return {Object}
+   */
+  _getRawRelations() {
+      let relations = this[_data].get('relations') || Immutable.Map({});
+
+      return relations.toJS();
+  }
+
+  /**
+   *
    * @return {Relation[]}
    */
   getRelations() {
-    let relations = this[_data].get('relations') || Immutable.Map({});
+    let relations = this[_data].get(m.relations) || Immutable.Map({});
     let relationObjects = [];
     let foreignRelations = [];
     let foreignKeys, path = [];
@@ -271,10 +295,20 @@ class Transport {
 
   /**
    *
+   * @return {Object}
+   */
+  _getRawLinks() {
+      let links = this[_data].get('links') || Immutable.Map({});
+
+      return links.toJS();
+  }
+
+  /**
+   *
    * @return {Link[]}
    */
   getLinks() {
-    let links = this[_data].get('links') || Immutable.Map({});
+    let links = this[_data].get(m.links) || Immutable.Map({});
     let linkObjects = [];
 
     links.keySeq().forEach(
@@ -304,8 +338,18 @@ class Transport {
    *
    * @return {Object}
    */
+  _getRawCalls() {
+      let calls = this[_data].get('calls') || Immutable.Map({});
+
+      return calls.toJS();
+  }
+
+  /**
+   *
+   * @return {Object}
+   */
   getCalls() {
-    let calls = this[_data].get('calls') || Immutable.Map({});
+    let calls = this[_data].get(m.calls) || Immutable.Map({});
     let callObjects = [];
     let params = [];
     let callData;
@@ -350,6 +394,16 @@ class Transport {
 
   /**
    *
+   * @return {Object}
+   */
+  _getRawTransactions() {
+      let transactions = this[_data].get('transactions') || Immutable.Map({});
+
+      return transactions.toJS();
+  }
+
+  /**
+   *
    * @param {string} type
    * @return {Object}
    */
@@ -359,7 +413,7 @@ class Transport {
       'r': 'rollback',
       'C': 'complete'
     };
-    let transactions = this[_data].get('transactions') || Immutable.Map({});
+    let transactions = this[_data].get(m.transactions) || Immutable.Map({});
     let transactionObjects = [];
     let params = [];
     let transactionData;
@@ -393,8 +447,18 @@ class Transport {
    *
    * @return {Object}
    */
+  _getRawErrors() {
+      let errors = this[_data].get('errors') || Immutable.Map({});
+
+      return errors.toJS();
+  }
+
+  /**
+   *
+   * @return {Object}
+   */
   getErrors() {
-    let errors = this[_data].get('errors') || Immutable.Map({});
+    let errors = this[_data].get(m.errors) || Immutable.Map({});
     let errorObjects = [];
 
     errors.keySeq().forEach(
@@ -577,7 +641,7 @@ class Transport {
    * @private
    */
   _setLink(name, link, uri) {
-    this[_data] = this[_data].setIn(['links', name, link], uri);
+    this[_data] = this[_data].setIn(['links', this._getGatewayPublicAddress(), name, link], uri);
   }
 
   /**
