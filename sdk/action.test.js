@@ -374,7 +374,7 @@ describe('Action', () => {
           'id': 1
         };
       assert.ok(action.setEntity(entity));
-      assert.deepEqual(transport.getData('dev', '1.0', 'read'), [entity]);
+      expect(transport.getData()[0].getActions()[0].getData()).to.eql(entity);
     });
 
     it('should register multiple action calls in the transport', () => {
@@ -393,7 +393,8 @@ describe('Action', () => {
         };
       assert.ok(action.setEntity(entity));
       assert.ok(action.setEntity(entity2));
-      assert.deepEqual(transport.getData('dev', '1.0', 'read'), [entity, entity2]);
+      expect(transport.getData()[0].getActions().map((actionData) => actionData.getData()))
+          .to.deep.equal([entity, entity2]);
     });
 
     it('should throw an error if the `entity` is not specified', () => {
@@ -419,7 +420,7 @@ describe('Action', () => {
         }
       ];
       assert.ok(action.setCollection(collection));
-      assert.deepEqual(transport.getData('dev', '1.0', 'list'), [collection]);
+      expect(transport.getData()[0].getActions()[0].getData()).to.eql(collection);
     });
 
     it('should throw an error if the `collection` is not specified', () => {

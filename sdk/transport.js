@@ -3,6 +3,16 @@
 const Immutable = require('immutable');
 const _ = require('lodash');
 const File = require('./file');
+const ServiceData = require('./service-data');
+const ActionData = require('./action-data');
+const Relation = require('./relation');
+const ForeignRelation = require('./foreign-relation');
+const Link = require('./link');
+const Caller = require('./caller.js');
+const Callee = require('./callee.js');
+const Transaction = require('./transaction.js');
+const TransportError = require('./error.js');
+const Param = require('./param.js');
 
 const m = require('./mappings');
 
@@ -166,32 +176,51 @@ class Transport {
 
   /**
    *
-   * @param {string} service
-   * @param {string} version
-   * @param {string} action
    * @return {Object}
    */
-  getData(service, version, action) {
-    let d = this[_data].get(m.data);
+  _getRawData() {
+      let d = this[_data].get(m.data);
 
-    if (!d) {
-      return [];
-    }
-
-    if (service) {
-      const gatewayPublicAddress = this._getGatewayPublicAddress();
-      d = d.getIn([gatewayPublicAddress, service]) || Immutable.Map({});
-
-      if (version) {
-        d = d.get(version) || Immutable.Map({});
-
-        if (action) {
-          d = d.get(action) || Immutable.Map({});
-        }
+      if (!d) {
+          return [];
       }
-    }
 
-    return d.toJS();
+      return d.toJS();
+  }
+
+  /**
+   *
+   * @return {ServiceData}
+   */
+  getData() {
+      let data = this[_data].get(m.data);
+      let dataObjects = [];
+      let actions = [];
+
+      if (!data) {
+          return [];
+      }
+
+      data.keySeq().forEach(
+          (address) => data.get(address).keySeq().forEach(
+              (name) => data.getIn([address, name]).keySeq().forEach(
+                  function (version) {
+                      actions = [];
+                      data.getIn([address, name, version]).keySeq().forEach(
+                          (action) => data.getIn([address, name, version, action]).keySeq().forEach(
+                              (i) => actions.push(new ActionData(
+                                  action,
+                                  data.getIn([address, name, version, action, i]).toJS()
+                              ))
+                          )
+                      );
+                      dataObjects.push(new ServiceData(address, name, version, actions));
+                  }
+              )
+          )
+      );
+
+      return dataObjects;
   }
 
   /**
@@ -203,17 +232,58 @@ class Transport {
 
   /**
    *
-   * @param {string} service
    * @return {Object}
    */
-  getRelations(service) {
-    let relations = this[_data].get('relations') || Immutable.Map({});
+  _getRawRelations() {
+      let relations = this[_data].get('relations') || Immutable.Map({});
 
-    if (service) {
-      relations = relations.get(service) || Immutable.Map({});
-    }
+      return relations.toJS();
+  }
 
-    return relations.toJS();
+  /**
+   *
+   * @return {Relation[]}
+   */
+  getRelations() {
+    let relations = this[_data].get(m.relations) || Immutable.Map({});
+    let relationObjects = [];
+    let foreignRelations = [];
+    let foreignKeys, path = [];
+
+    relations.keySeq().forEach(function (addressFrom) {
+      path = [addressFrom];
+      relations.getIn(path).keySeq().forEach(function (serviceFrom) {
+        path = [addressFrom, serviceFrom];
+        relations.getIn(path).keySeq().forEach(function (primaryKey) {
+          foreignRelations = [];
+          path = [addressFrom, serviceFrom, primaryKey];
+          relations.getIn(path).keySeq().forEach(function (addressTo) {
+            path = [addressFrom, serviceFrom, primaryKey, addressTo];
+            relations.getIn(path).keySeq().forEach(function (serviceTo) {
+              path = [addressFrom, serviceFrom, primaryKey, addressTo, serviceTo];
+              foreignKeys = relations.getIn(path);
+              if (foreignKeys.toJS) {
+                  foreignKeys = foreignKeys.toJS();
+              }
+              foreignRelations.push(new ForeignRelation(
+                  addressTo,
+                  serviceTo,
+                  _.isArray(foreignKeys) ? 'many' : 'one',
+                  _.isArray(foreignKeys) ? foreignKeys : [foreignKeys]
+              ));
+            });
+          });
+          relationObjects.push(new Relation(
+              addressFrom,
+              serviceFrom,
+              primaryKey,
+              foreignRelations
+          ));
+        });
+      });
+    });
+
+    return relationObjects;
   }
 
   /**
@@ -225,17 +295,36 @@ class Transport {
 
   /**
    *
-   * @param {string} service
    * @return {Object}
    */
-  getLinks(service) {
-    let links = this[_data].get('links') || Immutable.Map({});
+  _getRawLinks() {
+      let links = this[_data].get('links') || Immutable.Map({});
 
-    if (service) {
-      links = links.get(service) || Immutable.Map({});
-    }
+      return links.toJS();
+  }
 
-    return links.toJS();
+  /**
+   *
+   * @return {Link[]}
+   */
+  getLinks() {
+    let links = this[_data].get(m.links) || Immutable.Map({});
+    let linkObjects = [];
+
+    links.keySeq().forEach(
+        (address) => links.get(address).keySeq().forEach(
+            (name) => links.getIn([address, name]).keySeq().forEach(
+                (link) => linkObjects.push(new Link(
+                    address,
+                    name,
+                    link,
+                    links.getIn([address, name, link])
+                ))
+            )
+        )
+    );
+
+    return linkObjects;
   }
 
   /**
@@ -247,17 +336,53 @@ class Transport {
 
   /**
    *
-   * @param {string} service
    * @return {Object}
    */
-  getCalls(service) {
-    let calls = this[_data].get('calls') || Immutable.Map({});
+  _getRawCalls() {
+      let calls = this[_data].get('calls') || Immutable.Map({});
 
-    if (service) {
-      calls = calls.get(service) || Immutable.Map({});
-    }
+      return calls.toJS();
+  }
 
-    return calls.toJS();
+  /**
+   *
+   * @return {Object}
+   */
+  getCalls() {
+    let calls = this[_data].get(m.calls) || Immutable.Map({});
+    let callObjects = [];
+    let params = [];
+    let callData;
+
+    calls.keySeq().forEach((service) => {
+      calls.get(service).keySeq().forEach(function (version) {
+        calls.getIn([service, version]).keySeq().forEach((primaryKey) => {
+          callData = calls.getIn([service, version, primaryKey]);
+          params = callData.get(m.params) || Immutable.List([]);
+          callObjects.push(new Caller(
+            service,
+            version,
+            callData.get(m.caller),
+            new Callee(
+              callData.get(m.timeout),
+              callData.get(m.duration),
+              callData.get(m.gateway),
+              callData.get(m.name),
+              callData.get(m.version),
+              callData.get(m.action),
+              params.map((param) => new Param(
+                param.get(m.name),
+                param.get(m.value),
+                param.get(m.type),
+                true
+              )).toJS()
+            )
+          ));
+        });
+      });
+    });
+
+    return callObjects;
   }
 
   /**
@@ -269,32 +394,92 @@ class Transport {
 
   /**
    *
-   * @param {string} service
    * @return {Object}
    */
-  getTransactions(service) {
-    let transactions = this[_data].get('transactions') || Immutable.Map({});
+  _getRawTransactions() {
+      let transactions = this[_data].get('transactions') || Immutable.Map({});
 
-    if (service) {
-      transactions = transactions.get(service) || Immutable.Map({});
-    }
-
-    return transactions.toJS();
+      return transactions.toJS();
   }
 
   /**
    *
-   * @param {string} service
+   * @param {string} type
    * @return {Object}
    */
-  getErrors(service) {
-    let errors = this[_data].get('errors') || Immutable.Map({});
+  getTransactions(type) {
+    const types = {
+      'c': 'commit',
+      'r': 'rollback',
+      'C': 'complete'
+    };
+    let transactions = this[_data].get(m.transactions) || Immutable.Map({});
+    let transactionObjects = [];
+    let params = [];
+    let transactionData;
 
-    if (service) {
-      errors = errors.get(service) || Immutable.Map({});
-    }
+    transactions.keySeq()
+      .filter((transactionType) => types[transactionType] === type)
+      .forEach((transactionType) => {
+        transactions.get(transactionType).keySeq().forEach((i) => {
+          transactionData = transactions.getIn([transactionType, i]);
+          params = transactionData.get(m.params) || Immutable.List([]);
+          transactionObjects.push(new Transaction(
+              types[transactionType],
+              transactionData.get(m.name),
+              transactionData.get(m.version),
+              transactionData.get(m.caller),
+              transactionData.get(m.action),
+              params.map((param) => new Param(
+                  param.get(m.name),
+                  param.get(m.value),
+                  param.get(m.type),
+                  true
+              )).toJS()
+          ));
+      });
+    });
 
-    return errors.toJS();
+    return transactionObjects;
+  }
+
+  /**
+   *
+   * @return {Object}
+   */
+  _getRawErrors() {
+      let errors = this[_data].get('errors') || Immutable.Map({});
+
+      return errors.toJS();
+  }
+
+  /**
+   *
+   * @return {Object}
+   */
+  getErrors() {
+    let errors = this[_data].get(m.errors) || Immutable.Map({});
+    let errorObjects = [];
+
+    errors.keySeq().forEach(
+      (address) => errors.get(address).keySeq().forEach(
+        (service) => errors.getIn([address, service]).keySeq().forEach(
+          (version) => errors.getIn([address, service, version]).keySeq().forEach(
+            (i) => errorObjects.push(new TransportError(
+                  address,
+                  service,
+                  version,
+                  errors.getIn([address, service, version, i, m.message]),
+                  errors.getIn([address, service, version, i, m.code]),
+                  errors.getIn([address, service, version, i, m.status])
+              )
+            )
+          )
+        )
+      )
+    );
+
+    return errorObjects;
   }
 
   /**
@@ -456,7 +641,7 @@ class Transport {
    * @private
    */
   _setLink(name, link, uri) {
-    this[_data] = this[_data].setIn(['links', name, link], uri);
+    this[_data] = this[_data].setIn(['links', this._getGatewayPublicAddress(), name, link], uri);
   }
 
   /**

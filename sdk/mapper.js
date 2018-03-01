@@ -192,27 +192,27 @@ class Mapper {
     }
 
     if (transport.hasData()) {
-      transportMessage[m.data] = transport.getData();
+      transportMessage[m.data] = transport._getRawData();
     }
 
     if (transport.hasRelations()) {
-      transportMessage[m.relations] = transport.getRelations();
+      transportMessage[m.relations] = transport._getRawRelations();
     }
 
     if (transport.hasLinks()) {
-      transportMessage[m.links] = transport.getLinks();
+      transportMessage[m.links] = transport._getRawLinks();
     }
 
     if (transport.hasCalls()) {
-      transportMessage[m.calls] = transport.getCalls();
+      transportMessage[m.calls] = transport._getRawCalls();
     }
 
     if (transport.getTransactions()) {
-      transportMessage[m.transactions] = transport.getTransactions();
+      transportMessage[m.transactions] = transport._getRawTransactions();
     }
 
     if (transport.getErrors()) {
-      transportMessage[m.errors] = transport.getErrors();
+      transportMessage[m.errors] = transport._getRawErrors();
     }
 
     if (transport.hasBody()) {

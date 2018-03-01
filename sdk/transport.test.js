@@ -4,6 +4,7 @@ const assert = require('assert');
 const _ = require('lodash');
 const Transport = require('./transport');
 const File = require('./file');
+const expect = require('chai').expect;
 
 const m = require('./mappings');
 
@@ -94,118 +95,308 @@ describe('Transport', () => {
 
   describe('getData()', () => {
     it('should return all the data stored in the transport', () => {
-      const d = {'': {users: {'1.0.0': {'get': [{foo: 'bar'}]}}}};
-      const _mockTransport = _.merge({[m.data]: d}, mockTransport);
-      const transport = new Transport(_mockTransport);
-      assert.deepEqual(transport.getData(), d);
-    });
+      const d = {
+        'address': {
+          users: {
+            '1.0.0': {
+              'get': [
+                {foo: 'bar'},
+                [
+                    {foo: 'bar'},
+                    {foo: 'biz'}
+                ]
+              ]
+            }
+          }
+        }
+      };
+      const expectedResult = [
+          {
+              ['_address']: 'address',
+              ['_name']: 'users',
+              ['_version']: '1.0.0',
+              ['_actions']: [
+                {
+                  ['_name']: 'get',
+                  ['_collection']: false,
+                  ['_data']: {foo: 'bar'}
+                },
+                {
+                  ['_name']: 'get',
+                  ['_collection']: true,
+                  ['_data']: [
+                      {foo: 'bar'},
+                      {foo: 'biz'}
+                  ]
+                }
+              ],
+          }
+      ];
 
-    it('should return data specified by `service`', () => {
-      const d = {'': {users: {'1.0.0': {'get': {}}}}};
       const _mockTransport = _.merge({[m.data]: d}, mockTransport);
       const transport = new Transport(_mockTransport);
-      assert.deepEqual(transport.getData('users'), d[''].users);
-    });
-
-    it('should return data specified by `service` and `version`', () => {
-      const d = {'': {users: {'1.0.0': {'get': {}}}}};
-      const _mockTransport = _.merge({[m.data]: d}, mockTransport);
-      const transport = new Transport(_mockTransport);
-      assert.deepEqual(transport.getData('users', '1.0.0'), d[''].users['1.0.0']);
-    });
-
-    it('should return data specified by `service` and `version` and `action`', () => {
-      const d = {'': {users: {'1.0.0': {'get': {}}}}};
-      const _mockTransport = _.merge({[m.data]: d}, mockTransport);
-      const transport = new Transport(_mockTransport);
-      assert.deepEqual(transport.getData('users', '1.0.0', 'get'), d[''].users['1.0.0'].get);
+      expect(transport.getData()).to.eql(expectedResult);
     });
 
     it('should return empty array if no data', () => {
-      const d = {'': ''};
-      const _mockTransport = _.merge({[m.data]: d}, mockTransport);
-      const transport = new Transport(_mockTransport);
-      assert.deepEqual(transport.getData('users', '1.0.0', 'get'), []);
+      const transport = new Transport(mockTransport);
+      assert.deepEqual(transport.getData(), []);
     });
   });
 
   describe('getRelations()', () => {
     it('should return all relations', () => {
-      const relations = {};
-      const _mockTransport = _.merge({relations}, mockTransport);
-      const transport = new Transport(_mockTransport);
-      assert.deepEqual(transport.getRelations(), relations);
-    });
+        const r = {
+            addressFrom: {
+                serviceFrom: {
+                    primaryKey: {
+                        addressTo: {
+                          serviceToSingle: 'singleKey',
+                          serviceToMulti: ['key1', 'key2']
+                        }
+                    }
+                }
+            }
+        };
 
-    it('should return relations specified by `service`', () => {
-      const relations = {users: {}};
-      const _mockTransport = _.merge({relations}, mockTransport);
-      const transport = new Transport(_mockTransport);
-      assert.deepEqual(transport.getRelations('users'), relations.users);
+        const expectedResult = [
+            {
+                ['_address']: 'addressFrom',
+                ['_name']: 'serviceFrom',
+                ['_primaryKey']: 'primaryKey',
+                ['_foreignRelations']: [
+                    {
+                        ['_address']: 'addressTo',
+                        ['_name']: 'serviceToSingle',
+                        ['_type']: 'one',
+                        ['_foreignKeys']: ['singleKey'],
+                    },
+                    {
+                        ['_address']: 'addressTo',
+                        ['_name']: 'serviceToMulti',
+                        ['_type']: 'many',
+                        ['_foreignKeys']: ['key1', 'key2'],
+                    }
+                ],
+            }
+        ];
+
+        const _mockTransport = _.merge({r}, mockTransport);
+        const transport = new Transport(_mockTransport);
+        expect(transport.getRelations()).to.eql(expectedResult);
     });
   });
 
   describe('getLinks()', () => {
     it('should return all links', () => {
-      const links = {};
-      const _mockTransport = _.merge({links}, mockTransport);
-      const transport = new Transport(_mockTransport);
-      assert.deepEqual(transport.getLinks(), links);
-    });
+      const l = {
+        address: {
+            name: {
+                link1: 'http://example.com/1',
+                link2: 'http://example.com/2'
+            }
+        }
+      };
+      const expectedResult = [
+          {
+                ['_address']: 'address',
+                ['_name']: 'name',
+                ['_link']: 'link1',
+                ['_uri']: 'http://example.com/1',
+          },
+          {
+                ['_address']: 'address',
+                ['_name']: 'name',
+                ['_link']: 'link2',
+                ['_uri']: 'http://example.com/2',
+          }
+      ];
 
-    it('should return links specified by `service`', () => {
-      const links = {users: {}};
-      const _mockTransport = _.merge({links}, mockTransport);
+      const _mockTransport = _.merge({l}, mockTransport);
       const transport = new Transport(_mockTransport);
-      assert.deepEqual(transport.getLinks('users'), links.users);
+      expect(transport.getLinks()).to.eql(expectedResult);
     });
   });
 
   describe('getCalls()', () => {
     it('should return all calls', () => {
-      const calls = {};
-      const _mockTransport = _.merge({calls}, mockTransport);
-      const transport = new Transport(_mockTransport);
-      assert.deepEqual(transport.getCalls(), calls);
-    });
+        const C = {
+            users: {
+                '1.0.0': [
+                    {
+                        'D': 1120,
+                        'x': 1500,
+                        'g': 'address',
+                        'n': 'posts',
+                        'v': '1.2.0',
+                        'a': 'list',
+                        'C': 'read',
+                        'p': [
+                            {
+                                'n': 'token',
+                                'v': 'abcd',
+                                't': 'string'
+                            },
+                            {
+                                'n': 'user_id',
+                                'v': 123,
+                                't': 'integer'
+                            }
+                        ]
+                    },
+                    {
+                        'n': 'comments',
+                        'v': '1.2.3',
+                        'a': 'find',
+                        'C': 'read'
+                    },
+                ]
+            }
+        };
 
-    it('should return calls specified by `service`', () => {
-      const calls = {users: {}};
-      const _mockTransport = _.merge({calls}, mockTransport);
-      const transport = new Transport(_mockTransport);
-      assert.deepEqual(transport.getCalls('users'), calls.users);
+        const expectedResult = [
+            {
+                ['_name']: 'users',
+                ['_version']: '1.0.0',
+                ['_action']: 'read',
+                ['_callee']: {
+                    ['_duration']: 1120,
+                    ['_timeout']: 1500,
+                    ['_name']: 'posts',
+                    ['_address']: 'address',
+                    ['_version']: '1.2.0',
+                    ['_action']: 'list',
+                    ['_params']: [
+                        {
+                            ['_name']: 'token',
+                            ['_value']: 'abcd',
+                            ['_type']: 'string',
+                            ['_exists']: true,
+                        },
+                        {
+                            ['_name']: 'user_id',
+                            ['_value']: 123,
+                            ['_type']: 'integer',
+                            ['_exists']: true,
+                        },
+                    ]
+                },
+            },
+            {
+                ['_name']: 'users',
+                ['_version']: '1.0.0',
+                ['_action']: 'read',
+                ['_callee']: {
+                    ['_duration']: undefined,
+                    ['_timeout']: undefined,
+                    ['_address']: undefined,
+                    ['_name']: 'comments',
+                    ['_version']: '1.2.3',
+                    ['_action']: 'find',
+                    ['_params']: [],
+                },
+            }
+        ];
+
+        const _mockTransport = _.merge({C}, mockTransport);
+        const transport = new Transport(_mockTransport);
+        expect(transport.getCalls()).to.eql(expectedResult);
     });
   });
 
   describe('getTransactions()', () => {
-    it('should return all transactions', () => {
-      const transactions = {};
-      const _mockTransport = _.merge({transactions}, mockTransport);
-      const transport = new Transport(_mockTransport);
-      assert.deepEqual(transport.getTransactions(), transactions);
+    const t = {
+      'c': [
+          {
+              'n': 'users',
+              'v': '1.0.0',
+              'a': 'save',
+              'C': 'create',
+              'p': [
+                  {
+                      'n': 'user_id',
+                      'v': 123,
+                      't': 'integer'
+                  }
+              ]
+          }
+      ],
+      'r': [
+          {
+              'n': 'users',
+              'v': '1.0.0',
+              'a': 'undo',
+              'C': 'create',
+              'p': [
+                  {
+                      'n': 'user_id',
+                      'v': 123,
+                      't': 'integer'
+                  }
+              ]
+          }
+      ]
+    };
+    const _mockTransport = _.merge({t}, mockTransport);
+    const transport = new Transport(_mockTransport);
+
+    it('should return all transactions of the given type', () => {
+        const expectedResult = [
+            {
+                ['_type']: 'commit',
+                ['_name']: 'users',
+                ['_version']: '1.0.0',
+                ['_callerAction']: 'create',
+                ['_calleeAction']: 'save',
+                ['_params']: [
+                    {
+                        ['_name']: 'user_id',
+                        ['_value']: 123,
+                        ['_type']: 'integer',
+                        ['_exists']: true,
+                    },
+                ]
+            }
+        ];
+
+        expect(transport.getTransactions('commit')).to.eql(expectedResult);
     });
 
-    it('should return transactions specified by `service`', () => {
-      const transactions = {users: {}};
-      const _mockTransport = _.merge({transactions}, mockTransport);
-      const transport = new Transport(_mockTransport);
-      assert.deepEqual(transport.getTransactions('users'), transactions.users);
+    it('should not return transactions of other types', () => {
+        expect(transport.getTransactions('complete')).to.eql([]);
     });
   });
 
   describe('getErrors()', () => {
     it('should return all errors', () => {
-      const errors = {};
-      const _mockTransport = _.merge({errors}, mockTransport);
-      const transport = new Transport(_mockTransport);
-      assert.deepEqual(transport.getErrors(), errors);
-    });
+        const e = {
+            'http://127.0.0.1:80': {
+                'users': {
+                    '1.0.0': [
+                        {
+                            'm': 'The user does not exist',
+                            'c': 9,
+                            's': '404 Not Found'
+                        }
+                    ]
+                }
+            }
+        };
+        const _mockTransport = _.merge({e}, mockTransport);
+        const transport = new Transport(_mockTransport);
 
-    it('should return errors specified by `service`', () => {
-      const errors = {users: {}};
-      const _mockTransport = _.merge({errors}, mockTransport);
-      const transport = new Transport(_mockTransport);
-      assert.deepEqual(transport.getErrors('users'), errors.users);
+        const expectedResult = [
+            {
+                ['_address']: 'http://127.0.0.1:80',
+                ['_name']: 'users',
+                ['_version']: '1.0.0',
+                ['_message']: 'The user does not exist',
+                ['_code']: 9,
+                ['_status']: '404 Not Found',
+            }
+        ];
+
+        expect(transport.getErrors()).to.eql(expectedResult);
     });
   });
 });

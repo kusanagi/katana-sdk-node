@@ -449,7 +449,7 @@ for action: "${this._actionName}"`
   commit(action, params) {
     const [name, version] = [this.getName(), this.getVersion()];
     const transaction = this._buildTransaction(action, params);
-    this._transport.registerTransaction('commit', name, version, transaction);
+    this._transport.registerTransaction('c', name, version, transaction);
 
     return this;
   }
@@ -464,7 +464,7 @@ for action: "${this._actionName}"`
   rollback(action, params) {
     const [name, version] = [this.getName(), this.getVersion()];
     const transaction = this._buildTransaction(action, params);
-    this._transport.registerTransaction('rollback', name, version, transaction);
+    this._transport.registerTransaction('r', name, version, transaction);
 
     return this;
   }
@@ -478,7 +478,7 @@ for action: "${this._actionName}"`
   complete(action, params) {
     const [name, version] = [this.getName(), this.getVersion()];
     const transaction = this._buildTransaction(action, params);
-    this._transport.registerTransaction('complete', name, version, transaction);
+    this._transport.registerTransaction('C', name, version, transaction);
 
     return this;
   }
