@@ -52,14 +52,6 @@ describe('ActionSchema', () => {
 
   });
 
-  xdescribe('get_primary_key()', () => {
-
-    it('return the path to the entity', () => {
-
-    });
-
-  });
-
   xdescribe('resolve_entity()', () => {
 
     it('return the path to the entity', () => {

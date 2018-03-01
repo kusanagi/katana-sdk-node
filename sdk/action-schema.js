@@ -164,14 +164,6 @@ class ActionSchema extends Schema {
 
   /**
    *
-   * @returns {string}
-   */
-  getPrimaryKey() {
-    return this._primaryKey;
-  }
-
-  /**
-   *
    * @param {Object} data
    * @returns {Object}
    */

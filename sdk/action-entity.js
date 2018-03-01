@@ -87,6 +87,10 @@ class ActionEntity extends Schema {
       fields.fields = this._parseField(mapping[m.fields]);
     }
 
+    if (mapping[m.primary_key]) {
+      fields.primary_key = this._parseField(mapping[m.primary_key]);
+    }
+
     return fields;
   }
 
