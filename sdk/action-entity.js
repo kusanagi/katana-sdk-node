@@ -1,3 +1,17 @@
+/*
+ * NODE SDK for the KATANA(tm) Framework (http://katana.kusanagi.io)
+ * Copyright (c) 2016-2018 KUSANAGI S.L. All rights reserved.
+ *
+ * Distributed under the MIT license
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code
+ *
+ * @link      https://github.com/kusanagi/katana-sdk-node
+ * @license   http://www.opensource.org/licenses/mit-license.php MIT License
+ * @copyright Copyright (c) 2016-2018 KUSANAGI S.L. (http://kusanagi.io)
+ */
+
 'use strict';
 
 const Schema = require('./schema');
@@ -85,6 +99,10 @@ class ActionEntity extends Schema {
 
     if (mapping[m.fields]) {
       fields.fields = this._parseField(mapping[m.fields]);
+    }
+
+    if (mapping[m.primary_key]) {
+      fields.primary_key = this._parseField(mapping[m.primary_key]);
     }
 
     return fields;

@@ -288,7 +288,7 @@ Please also be sure to review our [community guidelines](https://app.kusanagi.io
 License
 -------
 
-Copyright 2016-2017 KUSANAGI S.L. (https://kusanagi.io). All rights reserved.
+Copyright 2016-2018 KUSANAGI S.L. (https://kusanagi.io). All rights reserved.
 
 KUSANAGI, the sword logo, KATANA and the "K" logo are trademarks and/or registered trademarks of KUSANAGI S.L. All other trademarks are property of their respective owners.
 
