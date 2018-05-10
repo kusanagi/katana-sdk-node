@@ -81,6 +81,8 @@ class Param {
       return Number.parseFloat(this._value);
     } else if (this._type === OBJECT) {
       return this._value;
+    } else if (this._type === ARRAY) {
+      return this._value;
     } else {
       try {
         return JSON.parse(this._value);
