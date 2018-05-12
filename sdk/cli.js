@@ -94,6 +94,11 @@ exports.parse = () => {
       describe: 'Disable all output, even if in debug mode',
       type: 'boolean'
     })
+    .option('log-level', {
+      alias: 'L',
+      describe: 'Syslog severity log level',
+      type: 'number'
+    })
     .argv;
 
     // Group vars
@@ -113,7 +118,11 @@ exports.parse = () => {
     argv.path = path.resolve(argv.$0);
 
     // Setup logger
-    logger.setLevel(argv.debug ? logger.levels.DEBUG : logger.levels.INFO);
+    if (typeof argv['log-level'] !== 'undefined') {
+      logger.setLevel(argv['log-level']);
+    } else {
+      logger.setLevel(6);
+    }
 
     return argv;
 };
