@@ -93,7 +93,6 @@ class Component {
    */
   _readCLIOptions() {
     this.cli           = cli.parse();
-    this.logger.setLevel(this.cli.debug ? logger.levels.DEBUG : logger.levels.INFO);
   }
 
   /**
@@ -536,14 +535,26 @@ class Component {
    * @param {*} value
    * @returns {boolean}
    */
-  log(value) {
+  log(value, level) {
     if (!this.cli.debug) {
       return false;
     }
 
+    if (typeof level === 'undefined') {
+      level = 6;
+    }
+
+    if (level < 0) {
+      level = 0;
+    }
+
+    if (level > 7) {
+      level = 7;
+    }
+
     let message = this._getAsString(value).substring(0, MAX_LOG_LENGTH);
 
-    logger.debug(message);
+    logger.log(level, message);
 
     return true;
   }

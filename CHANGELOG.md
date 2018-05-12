@@ -6,6 +6,9 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ## [Unreleased]
+## Changed
+- Adapted logger for katana 2
+
 ## Fixed
 - Fix array parameter parse
 
@@ -47,7 +50,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ## [1.1.9] - 2017-08-30
 ## Fixed
-- Fix #30 
+- Fix #30
 - Fixed action/response.getTransport() to return copied freezed objects
 
 ## [1.1.8] - 2017-08-28

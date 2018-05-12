@@ -21,7 +21,6 @@ const ISO_8601_REGEX = /^\d{4}-\d\d-\d\dT\d\d:\d\d:\d\d(\.\d+)?(([+-]\d\d:\d\d)|
 
 describe('logger', () => {
   let output;
-  logger.setDelay(null); // Disable workaround for missing stdout lines in katana-1.0.0
 
   // Test setup
   const log = console.log; // backup native call
@@ -42,12 +41,12 @@ describe('logger', () => {
     // https://github.com/kusanagi/katana-sdk-spec#53-logging
     it('should log a message formatted according to the spec', () => {
 
-      logger.log(logger.levels.INFO, 'test');
+      logger.log(6, 'test');
 
       const [timestamp, level, tag, message, requestId] = output.split(' ');
 
       assert.equal(true, ISO_8601_REGEX.test(timestamp));
-      assert.equal(level, `[${logger.levels.INFO}]`);
+      assert.equal(level, '[INFO]');
       assert.equal(tag, '[SDK]');
       assert.equal(message, 'test');
       assert.equal(requestId, undefined);
@@ -55,7 +54,7 @@ describe('logger', () => {
 
     it('should not output the requestId if not set', () => {
       logger.setRequestId(null);
-      logger.log(logger.levels.INFO, 'test');
+      logger.log(6, 'test');
 
       const [, , , , requestId] = output.split(' ');
       assert.equal(requestId, undefined);
@@ -65,7 +64,7 @@ describe('logger', () => {
       const uuid = '55f33a09-3d00-40ac-8418-4c88c37679cb';
 
       logger.setRequestId(uuid);
-      logger.log(logger.levels.INFO, 'test');
+      logger.log(6, 'test');
 
       const [, , , , requestId] = output.split(' ');
       assert.equal(requestId, `|${uuid}|`);
@@ -73,13 +72,7 @@ describe('logger', () => {
 
     it('should set level as INFO when the level setting is invalid/unknown', () => {
       logger.setLevel('UNKNOWN');
-      assert.equal(logger.getLevel(), logger.levels.INFO);
-    });
-
-    it('should use INFO level when calling log() with an unknown level', () => {
-      logger.log('UNKOWN', 'test');
-      const [, level] = output.split(' ');
-      assert.equal(level, `[${logger.levels.INFO}]`);
+      assert.equal(logger.getLevel(), 6);
     });
 
   });
@@ -88,39 +81,39 @@ describe('logger', () => {
     it('should log a DEBUG message when logger level setting is lower or equal DEBUG', () => {
       const message = 'test';
 
-      logger.setLevel(logger.levels.DEBUG);
+      logger.setLevel(7);
       logger.debug(message);
 
       const [, level, , loggedMessage] = output.split(' ');
 
-      assert.equal(level, `[${logger.levels.DEBUG}]`);
+      assert.equal(level, '[DEBUG]');
       assert.equal(message, loggedMessage);
     });
 
     it('should not log a DEBUG message when logger level is higher than DEBUG', () => {
-      logger.setLevel(logger.setLevel(logger.levels.INFO));
+      logger.setLevel(logger.setLevel(6));
 
       logger.debug('test');
 
       assert.equal(null, output);
     });
   });
-  
+
   describe('info()', () => {
     it('should log a INFO message when logger level setting is lower or equal INFO', () => {
       const message = 'test';
 
-      logger.setLevel(logger.levels.INFO);
+      logger.setLevel(6);
       logger.info(message);
 
       const [, level, , loggedMessage] = output.split(' ');
 
-      assert.equal(level, `[${logger.levels.INFO}]`);
+      assert.equal(level, '[INFO]');
       assert.equal(message, loggedMessage);
     });
 
     it('should not log a INFO message when logger level is higher than INFO', () => {
-      logger.setLevel(logger.setLevel(logger.levels.WARNING));
+      logger.setLevel(logger.setLevel(4));
 
       logger.info('test');
 
@@ -132,17 +125,17 @@ describe('logger', () => {
     it('should log a WARNING message when logger level setting is lower or equal WARNING', () => {
       const message = 'test';
 
-      logger.setLevel(logger.levels.WARNING);
+      logger.setLevel(4);
       logger.warning(message);
 
       const [, level, , loggedMessage] = output.split(' ');
 
-      assert.equal(level, `[${logger.levels.WARNING}]`);
+      assert.equal(level, '[WARNING]');
       assert.equal(message, loggedMessage);
     });
 
     it('should not log a WARNING message when logger level is higher than WARNING', () => {
-      logger.setLevel(logger.setLevel(logger.levels.ERROR));
+      logger.setLevel(logger.setLevel(3));
 
       logger.warning('test');
 
@@ -158,7 +151,7 @@ describe('logger', () => {
 
       const [, level, , loggedMessage] = output.split(' ');
 
-      assert.equal(level, `[${logger.levels.ERROR}]`);
+      assert.equal(level, '[ERROR]');
       assert.equal(message, loggedMessage);
     });
   });

@@ -205,8 +205,8 @@ class Api {
    * @param {*} value
    * @return {boolean}
    */
-  log(value) {
-    return this._component.log(value);
+  log(value, level) {
+    return this._component.log(value, level);
   }
 
 }

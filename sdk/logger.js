@@ -18,20 +18,16 @@
 // http://mongodb.github.io/node-mongodb-native/2.2/api/node_modules_mongodb-core_lib_connection_logger.js.html
 
 // Logger levels
-const DEBUG   = 'DEBUG';
-const INFO    = 'INFO';
-const WARNING = 'WARNING';
-const ERROR   = 'ERROR';
-
-const levelPriorities = {
-  DEBUG: -1,
-  INFO: 0,
-  WARNING: 1,
-  ERROR: 2,
-};
+const EMERGENCY = 0;
+const ALERT     = 1;
+const CRITICAL  = 2;
+const ERROR     = 3;
+const WARNING   = 4;
+const NOTICE    = 5;
+const INFO      = 6;
+const DEBUG     = 7;
 
 let _level = null;
-let _delay  = 1000;
 let _requestId  = null;
 
 /**
@@ -42,9 +38,17 @@ class Logger {
    * Create default logger
    */
   constructor() {
-    this.levels = {INFO, DEBUG, WARNING, ERROR};
-    _level      = this.levels.INFO;
-    _delay      = 1000; // In ms
+    this.levels = [
+      'EMERGENCY',
+      'ALERT',
+      'CRITICAL',
+      'ERROR',
+      'WARNING',
+      'NOTICE',
+      'INFO',
+      'DEBUG'
+    ];
+    _level = INFO;
   }
 
   /**
@@ -53,7 +57,12 @@ class Logger {
    * @param {string} level Some available logger level or back to default
    */
   setLevel(level) {
-    _level = this.levels[level] || _level;
+    if (typeof level === 'number') {
+      _level = level;
+    } else {
+      level = this.levels.indexOf(level);
+      _level = level >= 0 ? level : _level;
+    }
   }
 
   /**
@@ -63,24 +72,6 @@ class Logger {
    */
   getLevel() {
     return _level;
-  }
-
-  /**
-   * Set the logger delay
-   *
-   * @param {string} delay Some available logger delay or back to default
-   */
-  setDelay(delay) {
-    _delay = delay;
-  }
-
-  /**
-   * Get the logger delay
-   *
-   * @return {string} Logger delay
-   */
-  getDelay() {
-    return _delay;
   }
 
   /**
@@ -104,14 +95,13 @@ class Logger {
   /**
    * Log a message with default format
    *
-   * @param {string} level Log level name
+   * @param {number} level Log level name
    * @param {string} message Log message
    * @param extra Optional extra arguments to log
    */
   log(level, message, ...extra) {
-
-    if (levelPriorities[_level] > levelPriorities[level]) {
-      return; // Skip logging if message level is below current level
+    if (_level < level) {
+      return; // Skip logging if message level is above current level
     }
 
     const parts = [this.getFormattedMessage(level, message), ...extra];
@@ -124,15 +114,7 @@ class Logger {
       console.log.apply(console, parts);
     }
 
-    if (!_delay) {
-      return writeLine();
-    }
-
-    // workaround for missing messages at the start of the process
-    setTimeout(function () {
-      writeLine();
-      _delay = 0; // After the initial delay, we don't need it anymore
-    }, _delay);
+    return writeLine();
   }
 
   /*
@@ -145,7 +127,7 @@ class Logger {
    * @return {string} The formatted log line
    */
   getFormattedMessage(level, message) {
-    const levelName = this.levels[level] || _level;
+    const levelName = this.levels[level];
     const timestamp = (new Date()).toISOString();
 
     return  `${timestamp} [${levelName}] [SDK] ${message.trim()}`;
@@ -178,6 +160,16 @@ class Logger {
   }
 
   /**
+   * Logs a message with NOTICE level
+   *
+   * @param {string} message Log message
+   * @param extra Optional extra arguments to log
+   */
+  notice(message, ...extra) {
+    this.log(NOTICE, message, ...extra);
+  }
+
+  /**
    * Logs a message with WARNING level
    *
    * @param {string} message Log message
@@ -195,6 +187,36 @@ class Logger {
    */
   error(message, ...extra) {
     this.log(ERROR, message, ...extra);
+  }
+
+  /**
+   * Logs a message with CRITICAL level
+   *
+   * @param {string} message Log message
+   * @param extra Optional extra arguments to log
+   */
+  critical(message, ...extra) {
+    this.log(CRITICAL, message, ...extra);
+  }
+
+  /**
+   * Logs a message with ALERT level
+   *
+   * @param {string} message Log message
+   * @param extra Optional extra arguments to log
+   */
+  alert(message, ...extra) {
+    this.log(ALERT, message, ...extra);
+  }
+
+  /**
+   * Logs a message with EMERGENCY level
+   *
+   * @param {string} message Log message
+   * @param extra Optional extra arguments to log
+   */
+   emergency(message, ...extra) {
+     this.log(EMERGENCY, message, ...extra);
   }
 }
 
