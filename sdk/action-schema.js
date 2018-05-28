@@ -109,8 +109,8 @@ class ActionSchema extends Schema {
     );
 
     const filesMappingArray = this.readProperty(mapping, m.files, []);
-    const filesArray  = filesMappingArray.map((fileMapping) =>
-      FileSchema.fromMapping(fileMapping)
+    const filesArray  = Object.keys(filesMappingArray).map((fileName) =>
+      FileSchema.fromMapping(fileName, filesMappingArray[fileName])
     );
 
     return new ActionSchema(

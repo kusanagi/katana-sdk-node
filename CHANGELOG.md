@@ -8,6 +8,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 ## [Unreleased]
 ## Changed
 - Adapted logger for katana 2
+- Adapted file parameters for katana 2
 
 ## Fixed
 - Fix array parameter parse
