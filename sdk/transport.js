@@ -515,8 +515,13 @@ class Transport {
    * @return {boolean}
    */
   hasFile(service, version, action, name) {
-    return this[_data]
-      .hasIn([m.files, this._getGatewayPublicAddress(), service, version, action, name]);
+    if (!this[_data].hasIn([m.files, this._getGatewayPublicAddress(), service, version, action])) {
+      return false;
+    }
+
+    let actionFiles = this[_data].getIn([m.files, this._getGatewayPublicAddress(), service, version, action]);
+
+    return actionFiles.filter((file) => file.getIn('n') === name).count() > 0;
   }
 
   /**
@@ -529,9 +534,9 @@ class Transport {
    */
   getFile(service, version, action, name) {
     let getGatewayPublicAddress = this._getGatewayPublicAddress();
+    let actionFiles = this[_data].getIn([m.files, getGatewayPublicAddress, service, version, action]);
 
-    return this[_data]
-      .getIn([m.files, getGatewayPublicAddress, service, version, action, name])
+    return actionFiles.filter((file) => file.getIn('n') === name).first()
       .toJS();
   }
 

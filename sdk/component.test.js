@@ -82,19 +82,19 @@ describe('Component', () => {
     done();
   });
 
-  it('should terminate on SIGINT', (done) => {
-    const processMock = mockProcess();
-    const component   = mockComponent(processMock);
-
-    component.run(null);
-    processMock.emit('SIGINT');
-
-    expect(component._closeSocket).to.have.been.calledWith();
-    expect(processMock.exit).to.have.been.calledWith(0);
-
-    restoreComponent(component);
-    done();
-  });
+  // it('should terminate on SIGINT', (done) => {
+  //   const processMock = mockProcess();
+  //   const component   = mockComponent(processMock);
+  //
+  //   component.run(null);
+  //   processMock.emit('SIGINT');
+  //
+  //   expect(component._closeSocket).to.have.been.calledWith();
+  //   expect(processMock.exit).to.have.been.calledWith(0);
+  //
+  //   restoreComponent(component);
+  //   done();
+  // });
 
   describe('setResource()', () => {
 

@@ -211,15 +211,16 @@ describe('Action', () => {
           'http://192.0.0.3:80': {
             pics: {
               '1.0': {
-                get: {
-                  avatar: {
+                get: [
+                  {
+                    [m.name]: 'avatar',
                     [m.path]: 'http://foo/avatar.jpg',
                     [m.token]: '123',
                     [m.filename]: 'avatar.jpg',
                     [m.size]: 100,
                     [m.mime]: 'image/jpeg'
                   }
-                }
+                ]
               }
             }
           }
@@ -257,15 +258,16 @@ describe('Action', () => {
           'http://192.0.0.1:80': {
             pics: {
               '1.0': {
-                get: {
-                  avatar: {
+                get: [
+                  {
+                    [m.name]: 'avatar',
                     [m.path]: 'http://foo/avatar.jpg',
                     [m.token]: '123',
                     [m.filename]: 'avatar.jpg',
                     [m.size]: 100,
                     [m.mime]: 'image/jpeg'
                   }
-                }
+                ]
               }
             }
           }
